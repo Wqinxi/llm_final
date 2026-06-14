@@ -54,6 +54,12 @@
             border: 1px solid #e0e0e0;
             border-bottom-left-radius: 4px;
         }
+        .message.user .bubble img {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+            margin-top: 8px;
+        }
         .input-area {
             background: #fff;
             border-top: 1px solid #e0e0e0;
@@ -65,8 +71,36 @@
             width: 100%;
             margin: 0 auto;
         }
-        textarea {
+        .input-wrapper {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .image-preview-bar {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .image-preview-bar.active { display: flex; }
+        .image-preview-bar img {
+            height: 60px;
+            border-radius: 8px;
+            border: 1px solid #d9d9d9;
+            object-fit: cover;
+        }
+        .image-preview-bar button {
+            height: 28px;
+            padding: 0 10px;
+            background: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        textarea {
+            width: 100%;
             border: 1px solid #d9d9d9;
             border-radius: 12px;
             padding: 10px 14px;
@@ -79,7 +113,7 @@
             font-family: inherit;
         }
         textarea:focus { border-color: #2d8cf0; }
-        button {
+        button#sendBtn {
             height: 44px;
             padding: 0 20px;
             background: #2d8cf0;
@@ -90,26 +124,50 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        button:hover { background: #1a7ae0; }
-        button:disabled { background: #a0c4f0; cursor: not-allowed; }
+        button#sendBtn:hover { background: #1a7ae0; }
+        button#sendBtn:disabled { background: #a0c4f0; cursor: not-allowed; }
         .loading { color: #999; font-style: italic; }
+        .drop-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .drop-overlay.active { display: flex; }
     </style>
 </head>
 <body>
     <div class="header">AI 智能助手</div>
     <div class="chat-container" id="chatContainer"></div>
     <div class="input-area">
-        <textarea id="userInput" placeholder="输入消息..." rows="1"></textarea>
+        <div class="input-wrapper">
+            <div class="image-preview-bar" id="imagePreview">
+                <img id="previewImg" src="" alt="preview">
+                <button onclick="clearImage()">删除</button>
+            </div>
+            <textarea id="userInput" placeholder="输入消息，或拖拽图片到页面..." rows="1"></textarea>
+        </div>
         <button id="sendBtn" onclick="sendMessage()">发送</button>
     </div>
+    <div class="drop-overlay" id="dropOverlay">释放以上传图片</div>
 
     <script>
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const dropOverlay = document.getElementById('dropOverlay');
         let messages = [];
+        let pendingImage = null; // base64 data URL
 
-        // 自适应高度：根据内容自动调整 textarea 高度
+        // 自适应高度
         userInput.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 200) + 'px';
@@ -122,6 +180,53 @@
             }
         });
 
+        // 拖拽逻辑
+        let dragCounter = 0;
+        window.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            dragCounter++;
+            dropOverlay.classList.add('active');
+        });
+        window.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dragCounter--;
+            if (dragCounter === 0) {
+                dropOverlay.classList.remove('active');
+            }
+        });
+        window.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        window.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragCounter = 0;
+            dropOverlay.classList.remove('active');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImageFile(files[0]);
+            }
+        });
+
+        function handleImageFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('请上传图片文件');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                pendingImage = evt.target.result;
+                previewImg.src = pendingImage;
+                imagePreview.classList.add('active');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearImage() {
+            pendingImage = null;
+            previewImg.src = '';
+            imagePreview.classList.remove('active');
+        }
+
         function appendMessage(role, content) {
             const div = document.createElement('div');
             div.className = `message ${role}`;
@@ -133,14 +238,40 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
+        function appendUserMessage(text, imageUrl) {
+            const div = document.createElement('div');
+            div.className = 'message user';
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            if (text) {
+                const textDiv = document.createElement('div');
+                textDiv.textContent = text;
+                bubble.appendChild(textDiv);
+            }
+            if (imageUrl) {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = 'uploaded';
+                if (!text) img.style.marginTop = '0';
+                bubble.appendChild(img);
+            }
+            div.appendChild(bubble);
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
         async function sendMessage() {
             const text = userInput.value.trim();
-            if (!text) return;
+            if (!text && !pendingImage) return;
 
-            appendMessage('user', text);
+            appendUserMessage(text, pendingImage);
             userInput.value = '';
             userInput.style.height = 'auto';
-            messages.push({ role: 'user', content: text });
+
+            const currentImage = pendingImage;
+            clearImage();
+
+            messages.push({ role: 'user', content: text || '[图片]' });
 
             sendBtn.disabled = true;
 
@@ -156,7 +287,7 @@
                 const res = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages: messages, image_url: null })
+                    body: JSON.stringify({ messages: messages, image_url: currentImage })
                 });
                 const data = await res.json();
                 document.getElementById(loadingId).remove();
