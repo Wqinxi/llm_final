@@ -53,21 +53,33 @@ class MainAgent:
 
         # 意图判断
         intent = self._classify_intent(user_message)
+        print(f"DEBUG:    [MainAgent] 意图判断结果: {intent}")
 
         context_parts = []
 
         # 图像处理
         if image_url or intent.get("needs_image"):
+            print("DEBUG:    [MainAgent] 决定调用 ImageAgent...")
             if image_url:
                 img_result = self.image_agent.run(image_url, query=user_message)
                 context_parts.append(img_result)
             else:
                 context_parts.append("【图像识别结果】\n用户未提供图片URL，但意图涉及图像。\n")
+        else:
+            print("DEBUG:    [MainAgent] 无需调用 ImageAgent")
 
         # 文档处理
         if intent.get("needs_doc"):
+            print("DEBUG:    [MainAgent] 决定调用 DocAgent...")
             doc_result = self.doc_agent.run(user_message)
             context_parts.append(doc_result)
+        else:
+            print("DEBUG:    [MainAgent] 无需调用 DocAgent")
+
+        if not context_parts:
+            print("DEBUG:    [MainAgent] 无需调用子Agent，直接由大模型回答")
+
+        print(f"DEBUG:    [MainAgent] 收集到的参考信息片段数: {len(context_parts)}")
 
         # 构建最终 prompt
         system_prompt = "你是一个智能助手。请根据用户问题"
