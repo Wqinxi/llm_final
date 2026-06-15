@@ -40,7 +40,7 @@ llm_final/
 ├── scripts/
 │   └── build_index.py       # 文档索引构建脚本（支持增量更新）
 ├── data/
-│   ├── raw_docs/            # 存放原始 .txt 文档
+│   ├── raw_docs/            # 存放原始文档（支持 .txt / .md / .docx / .pdf / .doc）
 │   ├── chroma_db/           # 向量数据库持久化目录
 │   └── index_state.json     # 索引状态（记录文件 MD5）
 ├── frontend/
@@ -95,7 +95,16 @@ export ZHIPU_API_KEY=your-zhipu-api-key
 
 ### 1. 准备文档
 
-将需要检索的 `.txt` 文档放入 `data/raw_docs/` 目录下。
+将需要检索的文档放入 `data/raw_docs/` 目录下。目前支持以下格式：
+
+| 格式 | 说明 |
+|------|------|
+| `.txt` / `.md` | 纯文本 / Markdown，直接读取 |
+| `.docx` | Word 文档（需安装 `python-docx`） |
+| `.pdf` | PDF 文档（需安装 `PyPDF2`） |
+| `.doc` | 旧版 Word 文档（Windows 下需安装 `pywin32`，且系统中需有 Microsoft Word） |
+
+> **提示**：如果 `.doc` 读取失败，建议将其另存为 `.docx` 后再放入目录。
 
 ### 2. 执行索引脚本
 
@@ -106,7 +115,7 @@ py scripts/build_index.py
 ```
 
 脚本会：
-- 读取 `data/raw_docs/` 下的所有 `.txt` 文件。
+- 读取 `data/raw_docs/` 下的所有支持格式文件。
 - 将文本分块后，调用智谱 `embedding-3` 模型生成向量。
 - 将向量索引保存到 `data/chroma_db/`。
 

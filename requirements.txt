@@ -4,3 +4,7 @@ openai
 python-multipart
 pydantic
 chromadb
+python-docx
+pdfplumber
+# 如需读取 .doc 格式，还需安装 pywin32（Windows 环境下依赖 Word）
+# pywin32

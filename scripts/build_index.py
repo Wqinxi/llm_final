@@ -3,7 +3,7 @@
 用法：
     py scripts/build_index.py
 说明：
-    读取 data/raw_docs/ 下的 .txt 文件，分块后调用智谱 Embedding API 构建向量索引，
+    读取 data/raw_docs/ 下的 .txt / .md / .doc / .docx / .pdf 文件，分块后调用智谱 Embedding API 构建向量索引，
     保存到 data/chroma_db/ 目录下。
     通过维护 data/index_state.json 中的文件 MD5，只对新文件或内容变更的文件重新索引。
 """
@@ -26,6 +26,8 @@ EMBEDDING_MODEL = "embedding-3"
 RAW_DOCS_PATH = os.path.join(PROJECT_ROOT, "data", "raw_docs")
 CHROMA_DB_PATH = os.path.join(PROJECT_ROOT, "data", "chroma_db")
 INDEX_STATE_PATH = os.path.join(PROJECT_ROOT, "data", "index_state.json")
+
+SUPPORTED_EXTS = {".txt", ".md", ".doc", ".docx", ".pdf"}
 
 
 class ZhipuEmbeddingFunction:
@@ -57,6 +59,76 @@ class ZhipuEmbeddingFunction:
         return "zhipu_embedding"
 
 
+def read_file(filepath: str) -> str:
+    """根据文件扩展名读取文本内容"""
+    ext = os.path.splitext(filepath)[1].lower()
+    if ext in {".txt", ".md"}:
+        with open(filepath, "r", encoding="utf-8") as f:
+            return f.read()
+
+    if ext == ".docx":
+        try:
+            import docx
+            document = docx.Document(filepath)
+            return "\n".join([p.text for p in document.paragraphs])
+        except Exception as e:
+            print(f"读取 {filepath} 失败: {e}")
+            return ""
+
+    if ext == ".pdf":
+        # 优先使用 pdfplumber（中文支持更好），回退到 PyPDF2
+        text = ""
+        try:
+            import pdfplumber
+            with pdfplumber.open(filepath) as pdf:
+                print(f"DEBUG: {filepath} 共 {len(pdf.pages)} 页（pdfplumber）")
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text + "\n"
+            print(f"DEBUG: {filepath} 提取文本长度 {len(text)}（pdfplumber）")
+            return text
+        except ImportError:
+            pass
+        except Exception as e:
+            print(f"DEBUG: pdfplumber 读取 {filepath} 失败: {e}")
+
+        try:
+            import PyPDF2
+            with open(filepath, "rb") as f:
+                reader = PyPDF2.PdfReader(f)
+                print(f"DEBUG: {filepath} 共 {len(reader.pages)} 页（PyPDF2）")
+                for page in reader.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text + "\n"
+            print(f"DEBUG: {filepath} 提取文本长度 {len(text)}（PyPDF2）")
+            return text
+        except Exception as e:
+            print(f"读取 {filepath} 失败: {e}")
+            return ""
+
+    if ext == ".doc":
+        # Windows 下尝试用 Word COM 接口读取
+        try:
+            import win32com.client as wc
+            word = wc.Dispatch("Word.Application")
+            word.Visible = False
+            doc = word.Documents.Open(os.path.abspath(filepath))
+            text = doc.Content.Text
+            doc.Close(False)
+            word.Quit()
+            return text
+        except ImportError:
+            print(f"跳过 {filepath}：读取 .doc 需要安装 pywin32（pip install pywin32）")
+            return ""
+        except Exception as e:
+            print(f"读取 {filepath} 失败，请确保已安装 Microsoft Word: {e}")
+            return ""
+
+    return ""
+
+
 def chunk_text(text: str, chunk_size: int = 300, overlap: int = 50) -> list:
     """简单文本分块"""
     chunks = []
@@ -82,7 +154,7 @@ def main():
 
     if not os.path.exists(args.input_dir):
         print(f"原始文档目录不存在: {args.input_dir}")
-        print("请先将 .txt 文档放入该目录后再运行此脚本。")
+        print("请先将文档放入该目录后再运行此脚本。")
         return
 
     # 加载历史索引状态
@@ -97,10 +169,11 @@ def main():
         embedding_function=ZhipuEmbeddingFunction(),
     )
 
-    # 计算当前所有 .txt 文件的 MD5
+    # 计算当前所有支持格式文件的 MD5
     current_files = {}
     for filename in os.listdir(args.input_dir):
-        if not filename.endswith(".txt"):
+        ext = os.path.splitext(filename)[1].lower()
+        if ext not in SUPPORTED_EXTS:
             continue
         filepath = os.path.join(args.input_dir, filename)
         current_files[filename] = compute_md5(filepath)
@@ -126,8 +199,10 @@ def main():
     # 对新文件或内容变更的文件进行索引（先删旧再添加）
     for filename in files_to_index:
         filepath = os.path.join(args.input_dir, filename)
-        with open(filepath, "r", encoding="utf-8") as f:
-            text = f.read()
+        text = read_file(filepath)
+        if not text.strip():
+            print(f"跳过 {filename}：未能读取到有效文本")
+            continue
         chunks = chunk_text(text)
 
         # 如果是变更文件，先删除旧 chunks

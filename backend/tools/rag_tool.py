@@ -63,7 +63,7 @@ def _init_chroma():
         )
 
 
-def rag_search(query: str, top_k: int = 6) -> str:
+def rag_search(query: str, top_k: int = 10) -> str:
     """
     普通 RAG 检索工具。
     基于 ChromaDB 向量数据库检索相关文档片段。
@@ -86,9 +86,10 @@ def rag_search(query: str, top_k: int = 6) -> str:
 
     print(f"DEBUG: final query_embeddings type={type(query_embeddings)}, preview={str(query_embeddings)[:80]}")
 
+    # 先检索较多片段，再按来源去重，保证多文档覆盖
     results = _docs_collection.query(
         query_embeddings=query_embeddings,
-        n_results=top_k,
+        n_results=15,
     )
     documents = results.get("documents", [[]])[0]
     metadatas = results.get("metadatas", [[]])[0]
@@ -96,9 +97,22 @@ def rag_search(query: str, top_k: int = 6) -> str:
     if not documents:
         return "【RAG 检索结果】\n未找到相关文档片段。\n"
 
+    # 限制每个来源最多保留 3 个片段，避免单一文档占满结果
+    source_counts = {}
+    filtered_docs = []
+    filtered_metas = []
+    for doc, meta in zip(documents, metadatas):
+        source = meta.get("source", "未知")
+        if source_counts.get(source, 0) < 3:
+            source_counts[source] = source_counts.get(source, 0) + 1
+            filtered_docs.append(doc)
+            filtered_metas.append(meta)
+        if len(filtered_docs) >= top_k:
+            break
+
     lines = []
-    for i, doc in enumerate(documents):
-        meta = metadatas[i] if i < len(metadatas) else {}
+    for i, doc in enumerate(filtered_docs):
+        meta = filtered_metas[i] if i < len(filtered_metas) else {}
         source = meta.get("source", "未知")
         lines.append(f"文档片段{i + 1}（来源：{source}）：{doc}")
     formatted = "\n".join(lines)
