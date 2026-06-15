@@ -91,11 +91,17 @@ def rag_search(query: str, top_k: int = 3) -> str:
         n_results=top_k,
     )
     documents = results.get("documents", [[]])[0]
+    metadatas = results.get("metadatas", [[]])[0]
 
     if not documents:
         return "【RAG 检索结果】\n未找到相关文档片段。\n"
 
-    formatted = "\n".join([f"文档片段{i + 1}：{doc}" for i, doc in enumerate(documents)])
+    lines = []
+    for i, doc in enumerate(documents):
+        meta = metadatas[i] if i < len(metadatas) else {}
+        source = meta.get("source", "未知")
+        lines.append(f"文档片段{i + 1}（来源：{source}）：{doc}")
+    formatted = "\n".join(lines)
     return formatted
 
 

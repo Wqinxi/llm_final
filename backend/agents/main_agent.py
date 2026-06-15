@@ -87,6 +87,7 @@ class MainAgent:
             system_prompt += (
                 "及以下参考信息，给出准确、简洁的回答。"
                 "如果参考信息不足，请基于你的知识回答，不要编造。"
+                "重要要求：不要在正文中逐条标注来源。如果回答参考了文档，请在回答最后另起一行输出 '---' 分割线，然后列出参考来源的文档名称。"
             )
         else:
             system_prompt += "，给出准确、简洁的回答。"
@@ -100,7 +101,11 @@ class MainAgent:
             context_str = "\n".join(context_parts)
             last_user = full_messages[-1]
             if last_user["role"] == "user":
-                last_user["content"] += f"\n\n--- 参考信息 ---\n{context_str}"
+                last_user["content"] += (
+                    f"\n\n--- 参考信息 ---\n"
+                    f"以下是从文档中检索到的参考片段，请在回答最后通过分割线列出参考来源文档名称，不要在正文中逐条标注。\n"
+                    f"{context_str}"
+                )
 
         try:
             response = client.chat.completions.create(
