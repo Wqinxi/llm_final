@@ -17,7 +17,7 @@
 
 - **Main Agent**：意图识别与结果汇总，调用智谱大模型（`glm-4-flash`）。
 - **Doc Agent**：提供文档增强能力，内置两个 Tool：
-  - `rag_search`：普通 RAG 检索（当前为 Mock 实现，可接入真实向量库）。
+  - `rag_search`：普通 RAG 检索，基于 ChromaDB 向量数据库实现。
   - `page_index_search`：结构文档 PageIndex 检索（预留接口）。
 - **Image Agent**：提供图像识别能力，内置 `read_image` Tool，调用智谱视觉模型（`glm-4v`）。
 
@@ -35,8 +35,14 @@ llm_final/
 │   │   ├── doc_agent.py     # 文档 Agent（RAG 工具调用）
 │   │   └── image_agent.py   # 图像 Agent（视觉识别）
 │   └── tools/
-│       ├── rag_tool.py      # RAG 相关工具
+│       ├── rag_tool.py      # RAG 相关工具（基于 ChromaDB）
 │       └── image_tool.py    # 图像识别工具
+├── scripts/
+│   └── build_index.py       # 文档索引构建脚本（支持增量更新）
+├── data/
+│   ├── raw_docs/            # 存放原始 .txt 文档
+│   ├── chroma_db/           # 向量数据库持久化目录
+│   └── index_state.json     # 索引状态（记录文件 MD5）
 ├── frontend/
 │   └── index.html           # 单页面聊天界面（自适应输入框）
 ├── requirements.txt         # Python 依赖
@@ -82,6 +88,40 @@ $env:ZHIPU_API_KEY="your-zhipu-api-key"
 # Linux / macOS
 export ZHIPU_API_KEY=your-zhipu-api-key
 ```
+
+## 构建文档索引（RAG）
+
+后端 RAG 检索依赖向量数据库，需要先将原始文档构建为向量索引。
+
+### 1. 准备文档
+
+将需要检索的 `.txt` 文档放入 `data/raw_docs/` 目录下。
+
+### 2. 执行索引脚本
+
+在项目根目录执行：
+
+```bash
+py scripts/build_index.py
+```
+
+脚本会：
+- 读取 `data/raw_docs/` 下的所有 `.txt` 文件。
+- 将文本分块后，调用智谱 `embedding-3` 模型生成向量。
+- 将向量索引保存到 `data/chroma_db/`。
+
+### 3. 增量更新机制
+
+脚本支持**增量构建**，不会每次都全量重建索引：
+
+- 首次运行时，会索引所有文档。
+- 再次运行时，脚本会比对 `data/index_state.json` 中记录的各文件 MD5：
+  - **新增文件**：直接加入索引。
+  - **内容变更**：删除旧索引，重新生成向量。
+  - **未变更文件**：跳过，避免重复调用 Embedding API 浪费 token。
+  - **已删除文件**：从向量库中移除对应的旧索引。
+
+> 如需强制重建全部索引，可手动删除 `data/index_state.json` 和 `data/chroma_db/` 目录后重新运行脚本。
 
 ## 启动服务
 

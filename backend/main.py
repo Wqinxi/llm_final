@@ -26,6 +26,16 @@ app.add_middleware(
 main_agent = MainAgent()
 
 
+@app.on_event("startup")
+async def startup_event():
+    from backend.tools.rag_tool import _init_chroma
+    try:
+        _init_chroma()
+        print("INFO:     向量数据库已加载")
+    except Exception as e:
+        print(f"WARNING:  向量数据库加载失败: {e}")
+
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
     msgs = [{"role": m.role, "content": m.content} for m in req.messages]
