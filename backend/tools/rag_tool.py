@@ -63,7 +63,7 @@ def _init_chroma():
         )
 
 
-def rag_search(query: str, top_k: int = 3) -> str:
+def rag_search(query: str, top_k: int = 6) -> str:
     """
     普通 RAG 检索工具。
     基于 ChromaDB 向量数据库检索相关文档片段。
