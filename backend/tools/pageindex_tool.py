@@ -130,13 +130,17 @@ def get_pageindex_client():
 
 
 def list_documents() -> str:
-    """列出所有已索引文档。"""
+    """列出所有已索引文档，doc_name 包含扩展名。"""
     client = get_pageindex_client()
     catalog = []
     for doc_id, doc in client.documents.items():
+        # 从文件路径获取带扩展名的文件名
+        doc_path = doc.get("path", "")
+        doc_name_with_ext = os.path.basename(doc_path)
+
         entry = {
             "doc_id": doc_id,
-            "doc_name": doc.get("doc_name", ""),
+            "doc_name": doc_name_with_ext,
             "type": doc.get("type", ""),
             "doc_description": doc.get("doc_description", ""),
         }
@@ -170,19 +174,19 @@ def get_page_content(doc_id: str, pages: str) -> str:
 
 
 def ensure_documents_indexed() -> list[str]:
-    """将 raw_docs 中支持的 PDF/Markdown 文件索引到 PageIndex workspace。"""
+    """将 raw_docs 中支持的 Markdown 文件索引到 PageIndex workspace（递归遍历子目录）。"""
     client = get_pageindex_client()
     indexed_ids = []
 
     if not os.path.isdir(RAW_DOCS_DIR):
         return indexed_ids
 
-    abs_paths = {
-        os.path.abspath(os.path.join(RAW_DOCS_DIR, fname))
-        for fname in os.listdir(RAW_DOCS_DIR)
-        if os.path.isfile(os.path.join(RAW_DOCS_DIR, fname))
-        and os.path.splitext(fname)[1].lower() in SUPPORTED_EXTS
-    }
+    # 递归遍历所有子目录
+    abs_paths = set()
+    for root, dirs, files in os.walk(RAW_DOCS_DIR):
+        for fname in files:
+            if os.path.splitext(fname)[1].lower() in SUPPORTED_EXTS:
+                abs_paths.add(os.path.abspath(os.path.join(root, fname)))
 
     path_to_id = {
         os.path.abspath(doc.get("path", "")): doc_id
@@ -219,6 +223,7 @@ def _dispatch_tool(name: str, arguments: dict) -> str:
 def page_index_search(query: str, max_iterations: int = 10) -> str:
     """
     PageIndex 层级结构检索：Agent 自动调用 get_document / get_document_structure / get_page_content。
+    检索结果会标注来源文档名称。
     """
     print(f"DEBUG:    [PageIndex] 开始 agentic 检索 query='{query}'")
     ensure_documents_indexed()
@@ -232,10 +237,26 @@ def page_index_search(query: str, max_iterations: int = 10) -> str:
         )
 
     catalog = list_documents()
+    # 构建文档 ID 到名称的映射，用于后续标注来源（使用带扩展名的文件名）
+    doc_id_to_name = {}
+    for doc_id, doc in client.documents.items():
+        doc_path = doc.get("path", "")
+        doc_name_with_ext = os.path.basename(doc_path)
+        doc_id_to_name[doc_id] = doc_name_with_ext
+
+    # 在 system prompt 中增加来源标注要求
+    prompt_with_citation = (
+        f"{PAGEINDEX_AGENT_PROMPT}\n\n"
+        "重要要求：在回答的最后，必须明确标注参考来源的文档名称。"
+        "格式：在回答结束后另起一行，输出 '---' 分割线，然后写 '参考来源：<文档名称>'。\n\n"
+        f"可用文档列表：\n{catalog}"
+    )
     messages = [
-        {"role": "system", "content": f"{PAGEINDEX_AGENT_PROMPT}\n\n可用文档列表：\n{catalog}"},
+        {"role": "system", "content": prompt_with_citation},
         {"role": "user", "content": query},
     ]
+    # 记录检索过程中引用的文档 ID
+    cited_doc_ids = set()
 
     llm = _get_llm_client()
     for i in range(max_iterations):
@@ -270,6 +291,9 @@ def page_index_search(query: str, max_iterations: int = 10) -> str:
                 fn_name = tool_call.function.name
                 fn_args = json.loads(tool_call.function.arguments or "{}")
                 print(f"DEBUG:    [PageIndex] tool_call={fn_name} args={fn_args}")
+                # 记录引用的文档 ID
+                if "doc_id" in fn_args:
+                    cited_doc_ids.add(fn_args["doc_id"])
                 result = _dispatch_tool(fn_name, fn_args)
                 messages.append(
                     {
@@ -281,6 +305,11 @@ def page_index_search(query: str, max_iterations: int = 10) -> str:
             continue
 
         answer = message.content or ""
+        # 如果模型没有标注来源，自动补充
+        if cited_doc_ids and "---" not in answer:
+            source_names = [doc_id_to_name.get(doc_id, "未知文档") for doc_id in cited_doc_ids]
+            source_str = ", ".join(source_names)
+            answer += f"\n\n---\n参考来源：{source_str}"
         print(f"DEBUG:    [PageIndex] 检索完成，迭代={i + 1}，结果长度={len(answer)}")
         return answer
 

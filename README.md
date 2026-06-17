@@ -12,13 +12,13 @@
       Doc Agent                       Image Agent
           |                                 |
     普通 RAG Tool                    read_image Tool
-    PageIndex RAG Tool (预留)
+    PageIndex RAG Tool
 ```
 
 - **Main Agent**：意图识别与结果汇总，调用智谱大模型（`glm-4-flash`）。
 - **Doc Agent**：提供文档增强能力，内置两个 Tool：
-  - `rag_search`：普通 RAG 检索，基于 ChromaDB 向量数据库实现。
-  - `page_index_search`：结构文档 PageIndex 检索（预留接口）。
+  - `rag_search`：普通 RAG 检索，基于 ChromaDB 向量数据库实现，支持 `.txt`、`.doc`、`.docx`、`.pdf` 格式。
+  - `page_index_search`：结构化文档 PageIndex 检索，基于文档层级结构索引，支持 `.md`、`.markdown` 格式，检索结果会标注来源文档。
 - **Image Agent**：提供图像识别能力，内置 `read_image` Tool，调用智谱视觉模型（`glm-4v`）。
 
 ## 目录结构
@@ -38,11 +38,15 @@ llm_final/
 │       ├── rag_tool.py      # RAG 相关工具（基于 ChromaDB）
 │       └── image_tool.py    # 图像识别工具
 ├── scripts/
-│   └── build_index.py       # 文档索引构建脚本（支持增量更新）
+│   ├── build_index.py       # RAG 向量索引构建脚本（支持增量更新）
+│   └── build_pageindex.py   # PageIndex 结构索引构建脚本
 ├── data/
-│   ├── raw_docs/            # 存放原始文档（支持 .txt / .md / .docx / .pdf / .doc）
-│   ├── chroma_db/           # 向量数据库持久化目录
-│   └── index_state.json     # 索引状态（记录文件 MD5）
+│   ├── raw_docs/            # 存放原始文档
+│   │                         #   - RAG: .txt / .doc / .docx / .pdf
+│   │                         #   - PageIndex: .md / .markdown
+│   ├── chroma_db/           # 向量数据库持久化目录（RAG）
+│   ├── index_state.json     # 索引状态（记录文件 MD5）
+│   └── pageindex_workspace/ # PageIndex 索引工作目录
 ├── frontend/
 │   └── index.html           # 单页面聊天界面（自适应输入框）
 ├── requirements.txt         # Python 依赖
@@ -144,19 +148,49 @@ python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 - 前端页面：http://localhost:8000/
 - API 文档：http://localhost:8000/docs
 
+## 构建 PageIndex 索引（结构化文档检索）
+
+PageIndex 适用于 Markdown 文档的结构化检索，基于文档层级结构（标题、段落）进行索引和查询，检索结果会明确标注来源文档。
+
+### 1. 准备 Markdown 文档
+
+将 `.md` 或 `.markdown` 文件放入 `data/raw_docs/` 目录或其子目录中。
+
+### 2. 执行 PageIndex 索引脚本
+
+在项目根目录执行：
+
+```bash
+py scripts/build_pageindex.py
+```
+
+脚本会：
+- 递归读取 `data/raw_docs/` 下的所有 Markdown 文件。
+- 调用智谱大模型分析文档结构，生成层级索引。
+- 将索引保存到 `data/pageindex_workspace/`。
+
+### 3. 索引特点
+
+- **递归遍历**：支持子目录，不限层级。
+- **增量索引**：已索引的文件会跳过，避免重复处理。
+- **来源标注**：检索结果会自动标注参考的文档名称（含扩展名）。
+
+> **注意**：PageIndex 依赖 `pageindex` 库，需确保已安装并在 `backend/config.py` 中配置 `PAGEINDEX_PATH`。
+
 ## 使用说明
 
 1. 打开浏览器访问 `http://localhost:8000/`。
 2. 在底部输入框中输入问题，按 **Enter** 发送（Shift+Enter 换行）。
 3. 前端会根据文本内容自动调整输入框高度。
 4. 后端 Main Agent 会自动判断：
-   - 若问题涉及文档知识，自动调用 **Doc Agent** 进行 RAG 增强。
-   - 若问题涉及图像，自动调用 **Image Agent** 进行识别（当前版本需通过 API 传入 `image_url`）。
+   - 若问题涉及文档知识，自动调用 **Doc Agent** 进行检索增强：
+     - 对 `.md` 文件：使用 **PageIndex** 结构化检索
+     - 对 `.txt/.doc/.docx/.pdf` 文件：使用 **RAG** 向量检索
+   - 若问题涉及图像，自动调用 **Image Agent** 进行识别。
    - 否则直接由大模型回答。
 
 ## 后续扩展
 
-- **RAG 接入真实向量库**：修改 `backend/tools/rag_tool.py` 中的 `rag_search` 函数，接入 Chroma / Milvus 等向量数据库。
-- **PageIndex RAG**：实现 `page_index_search` 函数，支持按页码索引的结构化文档检索。
 - **图片上传**：前端增加图片上传组件，将图片转为 Base64 后通过 `image_url` 字段传给后端。
 - **数据持久化**：接入数据库，保存对话历史、文档原始内容与向量嵌入。
+- **更多文档格式**：扩展 PageIndex 支持 PDF 结构解析，或增加更多文件类型的支持。

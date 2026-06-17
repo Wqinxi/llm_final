@@ -169,14 +169,17 @@ def main():
         embedding_function=ZhipuEmbeddingFunction(),
     )
 
-    # 计算当前所有支持格式文件的 MD5
+    # 计算当前所有支持格式文件的 MD5（递归遍历子目录）
     current_files = {}
-    for filename in os.listdir(args.input_dir):
-        ext = os.path.splitext(filename)[1].lower()
-        if ext not in SUPPORTED_EXTS:
-            continue
-        filepath = os.path.join(args.input_dir, filename)
-        current_files[filename] = compute_md5(filepath)
+    for root, dirs, files in os.walk(args.input_dir):
+        for filename in files:
+            ext = os.path.splitext(filename)[1].lower()
+            if ext not in SUPPORTED_EXTS:
+                continue
+            filepath = os.path.join(root, filename)
+            # 使用相对路径作为键，保留目录结构信息
+            rel_path = os.path.relpath(filepath, args.input_dir)
+            current_files[rel_path] = compute_md5(filepath)
 
     # 判断哪些文件需要重新索引，哪些旧文件已被删除
     files_to_index = []
@@ -199,6 +202,8 @@ def main():
     # 对新文件或内容变更的文件进行索引（先删旧再添加）
     for filename in files_to_index:
         filepath = os.path.join(args.input_dir, filename)
+        # 确保父目录存在
+        os.makedirs(os.path.dirname(filepath) if os.path.dirname(filepath) else args.input_dir, exist_ok=True)
         text = read_file(filepath)
         if not text.strip():
             print(f"跳过 {filename}：未能读取到有效文本")

@@ -1,0 +1,44 @@
+{
+  "dfb35026-c226-495c-9aaf-4e224e85d733": {
+    "type": "md",
+    "doc_name": "玉米排骨汤",
+    "doc_description": "This document provides a detailed recipe for making corn and pork rib soup with specific measurements, step-by-step instructions, and beginner-friendly cooking techniques including blanching ribs and stir-frying with vinegar.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\汤\\玉米排骨汤.md",
+    "line_count": 64
+  },
+  "db2dcc94-94b1-4517-b56a-d385605e60c3": {
+    "type": "md",
+    "doc_name": "紫菜蛋花汤",
+    "doc_description": "A step-by-step Chinese recipe for making simple and nutritious seaweed egg drop soup with precise measurements and timing instructions.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\汤\\紫菜蛋花汤.md",
+    "line_count": 41
+  },
+  "2ad6970a-d257-4b81-9a16-d50afd632cb7": {
+    "type": "md",
+    "doc_name": "农家一碗香",
+    "doc_description": "This document provides a step-by-step recipe for making Hunan-style Farmer's Fragrant Bowl, a savory stir-fry featuring pork belly, eggs, and green peppers with detailed preparation instructions and nutritional information.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\肉菜\\农家一碗香.md",
+    "line_count": 51
+  },
+  "a17ae575-bf5f-4719-a2cb-34d2a9537c38": {
+    "type": "md",
+    "doc_name": "咖喱肥牛",
+    "doc_description": "This document provides a beginner-friendly recipe for making rich, home-style curry beef with specific measurements and instructions, suitable for bento boxes.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\肉菜\\咖喱肥牛.md",
+    "line_count": 52
+  },
+  "9863f077-0d3b-40f0-bd44-9e73219951be": {
+    "type": "md",
+    "doc_name": "梅菜扣肉",
+    "doc_description": "This comprehensive recipe guide provides detailed measurements, step-by-step instructions, and expert tips for preparing the traditional Hakka dish \"梅菜扣肉,\" a complex 4-star difficulty recipe featuring rich but not greasy pork belly with preserved vegetables.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\肉菜\\梅菜扣肉.md",
+    "line_count": 64
+  },
+  "cca2e63e-8427-46dd-b536-5a2516a2e4ff": {
+    "type": "md",
+    "doc_name": "麻婆豆腐",
+    "doc_description": "This document provides a step-by-step recipe for making Mapo Tofu with a unique twist using salted duck eggs instead of traditional broad bean paste, creating a savory, slightly numbing, and spicy dish that's rich in protein and minerals.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\肉菜\\麻婆豆腐.md",
+    "line_count": 59
+  }
+}

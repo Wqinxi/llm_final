@@ -1,0 +1,63 @@
+{
+  "id": "dfb35026-c226-495c-9aaf-4e224e85d733",
+  "type": "md",
+  "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\汤\\玉米排骨汤.md",
+  "doc_name": "玉米排骨汤",
+  "doc_description": "This document provides a detailed recipe for making corn and pork rib soup with specific measurements, step-by-step instructions, and beginner-friendly cooking techniques including blanching ribs and stir-frying with vinegar.",
+  "line_count": 64,
+  "structure": [
+    {
+      "title": "玉米排骨汤的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 玉米排骨汤的做法\n\n玉米排骨汤是一道鲜美清甜的家常汤品，排骨软烂，玉米和胡萝卜带来自然甜味。富含蛋白质、维生素和膳食纤维，营养均衡。做法简单，对新手友好，只需将排骨焯水煸香后慢炖约一小时即可完成。从备菜到出锅大约需要一个半小时。\n\n预估烹饪难度：★★★\n\n预估卡路里：1724 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 9,
+          "text": "## 必备原料和工具\n\n* 排骨\n* 玉米\n* 胡箩卜\n* 生姜\n* 大葱\n* 食用油\n* 醋\n* 料酒\n* 黑胡椒粉\n* 食用盐\n* 砂锅（没有的话，用铁锅也行）",
+          "summary": "## 必备原料和工具\n\n* 排骨\n* 玉米\n* 胡箩卜\n* 生姜\n* 大葱\n* 食用油\n* 醋\n* 料酒\n* 黑胡椒粉\n* 食用盐\n* 砂锅（没有的话，用铁锅也行）"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 23,
+          "text": "## 计算\n\n每份：\n\n* 排骨 500-800g\n* 玉米一根（喜欢吃玉米的可以多一根）\n* 胡萝卜一根（喜欢吃胡箩卜的可以多一根）\n* 大葱小半根\n* 香葱一根\n* 食用油 10 ml\n* 黑胡椒粉 4g\n* 料酒 10ml\n* 醋 10ml\n* 食用盐 10-15g（根据最后汤剩余的量而定）\n* 开水 1000 ml",
+          "summary": "## 计算\n\n每份：\n\n* 排骨 500-800g\n* 玉米一根（喜欢吃玉米的可以多一根）\n* 胡萝卜一根（喜欢吃胡箩卜的可以多一根）\n* 大葱小半根\n* 香葱一根\n* 食用油 10 ml\n* 黑胡椒粉 4g\n* 料酒 10ml\n* 醋 10ml\n* 食用盐 10-15g（根据最后汤剩余的量而定）\n* 开水 1000 ml"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 39,
+          "text": "## 操作",
+          "nodes": [
+            {
+              "title": "备菜",
+              "node_id": "0004",
+              "line_num": 41,
+              "text": "### 备菜\n\n1. 大葱切成 3-4cm 的大段，用刀背拍一下\n2. 玉米剁成小块\n3. 胡箩卜切成滚刀块\n4. 生姜去皮切大片\n5. 新鲜的排骨砍成小块",
+              "summary": "### 备菜\n\n1. 大葱切成 3-4cm 的大段，用刀背拍一下\n2. 玉米剁成小块\n3. 胡箩卜切成滚刀块\n4. 生姜去皮切大片\n5. 新鲜的排骨砍成小块"
+            },
+            {
+              "title": "操作",
+              "node_id": "0005",
+              "line_num": 49,
+              "text": "### 操作\n\n1. 排骨凉水下锅，放入大葱、生姜、料酒开始焯水，大火烧开，撇去浮沫，捞出排骨，沥干水分\n2. 热锅凉油，切大片的生姜和排骨一起下锅煸炒，待排骨表面微微焦黄，放入醋（可加速肉质软烂），继续煸炒一分钟\n3. 冲入开水，一次给足，之后就不要再加了，大火烧开\n4. 先下入玉米，放入胡椒粉，盖盖小火炖二十分钟，然后放入胡萝卜，盖盖继续小火炖四十分钟\n5. 调味很简单，出锅前三分钟，除了盐什么都不用放，最后撒上一把小葱花即可\n\n![玉米排骨汤-预览图-1](./玉米排骨汤.jpeg)",
+              "summary": "This document provides a recipe for making corn and pork rib soup. It includes detailed step-by-step instructions for preparing the dish, starting with blanching the ribs, stir-frying with vinegar, adding water and vegetables, and proper seasoning techniques. The recipe specifies cooking times for different ingredients and emphasizes simple seasoning with only salt in the final minutes before garnishing with chopped scallions. An image of the finished dish is also included."
+            }
+          ],
+          "prefix_summary": "## 操作"
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0006",
+          "line_num": 59,
+          "text": "## 附加内容\n\n这道菜制作起来并不难，而且食材简单，对新手友好，适合降温的时候来上一大碗。\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "## 附加内容\n\n这道菜制作起来并不难，而且食材简单，对新手友好，适合降温的时候来上一大碗。\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。"
+        }
+      ],
+      "prefix_summary": "# 玉米排骨汤的做法\n\n玉米排骨汤是一道鲜美清甜的家常汤品，排骨软烂，玉米和胡萝卜带来自然甜味。富含蛋白质、维生素和膳食纤维，营养均衡。做法简单，对新手友好，只需将排骨焯水煸香后慢炖约一小时即可完成。从备菜到出锅大约需要一个半小时。\n\n预估烹饪难度：★★★\n\n预估卡路里：1724 大卡"
+    }
+  ]
+}
