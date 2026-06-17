@@ -1,7 +1,6 @@
 import os
 import sys
 
-# 将项目根目录加入 sys.path，确保 backend 包可被导入
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi import FastAPI
@@ -11,10 +10,10 @@ from fastapi.responses import FileResponse
 
 from backend.models.schemas import ChatRequest, ChatResponse
 from backend.agents.main_agent import MainAgent
+from backend.tools.doc_parser import parse_document
 
 app = FastAPI(title="AI Chat Agent")
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -25,7 +24,6 @@ app.add_middleware(
 
 main_agent = MainAgent()
 
-
 @app.on_event("startup")
 async def startup_event():
     from backend.tools.rag_tool import _init_chroma
@@ -35,23 +33,31 @@ async def startup_event():
     except Exception as e:
         print(f"WARNING:  向量数据库加载失败: {e}")
 
-
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
     msgs = [{"role": m.role, "content": m.content} for m in req.messages]
-    answer = main_agent.run(msgs, image_url=req.image_url)
+    image_url = req.image_url
+    upload_files = req.upload_files
+
+    # 解析所有上传文档，拼接完整文档文本
+    doc_context = ""
+    for file_item in upload_files:
+        text = parse_document(file_item.name, file_item.base64)
+        doc_context += text + "\n\n"
+
+    answer = main_agent.run(
+        messages=msgs,
+        image_url=image_url,
+        upload_doc_content=doc_context  # 新增参数传递文档解析内容
+    )
     return ChatResponse(content=answer)
 
-
-# 挂载前端静态文件
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
-
 
 @app.get("/")
 async def root():
     return FileResponse(os.path.join(frontend_dir, "index.html"))
-
 
 if __name__ == "__main__":
     import uvicorn

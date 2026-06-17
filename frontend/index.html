@@ -112,6 +112,7 @@
         .image-preview-bar {
             display: none;
             align-items: center;
+            flex-wrap: wrap;
             gap: 10px;
             padding: 10px 14px;
             background: rgba(61, 139, 225, 0.08);
@@ -119,6 +120,13 @@
             border-radius: 16px;
         }
         .image-preview-bar.active { display: flex; }
+        /* 无图片时图片预览隐藏不占位 */
+        .img-wrap {
+            display: none;
+            align-items: center;
+            gap:8px;
+        }
+        .img-wrap.show { display: flex; }
         .image-preview-bar img {
             height: 60px;
             width: 60px;
@@ -136,6 +144,34 @@
             font-size: 13px;
             cursor: pointer;
         }
+        /* 文档预览样式 */
+        .file-preview-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid #dfe7f5;
+        }
+        .file-preview-item span {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .file-preview-item button {
+            background: #fb6f55;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            padding: 2px 8px;
+            cursor: pointer;
+        }
+        #fileInput {
+            display: none;
+        }
         textarea {
             width: 100%;
             border: 1px solid rgba(77, 120, 184, 0.18);
@@ -150,11 +186,11 @@
             font-family: inherit;
             background: #f7f8fb;
             color: #1c2b4a;
-            overflow: auto; /* allow scrolling but hide scrollbar visually */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE 10+ */
+            overflow: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        textarea::-webkit-scrollbar{display:none} /* Chrome/Safari */
+        textarea::-webkit-scrollbar{display:none}
         textarea:focus { border-color: #3d8be1; background: #fff; }
         button#sendBtn {
             height: 50px;
@@ -210,16 +246,23 @@
             <div class="input-area">
                 <div class="input-wrapper">
                     <div class="image-preview-bar" id="imagePreview">
-                        <img id="previewImg" src="" alt="preview">
-                        <button onclick="clearImage()">删除</button>
+                        <!-- 图片容器，无图片自动隐藏 -->
+                        <div class="img-wrap" id="imgWrap">
+                            <img id="previewImg" src="" alt="preview">
+                            <button onclick="clearImage()">删除图片</button>
+                        </div>
+                        <!-- 文档列表容器 -->
+                        <div id="fileListBox"></div>
+                        <!-- 隐藏的文件输入框，仅拖拽/文件选择弹窗使用 -->
+                        <input type="file" id="fileInput" accept=".txt,.md,.pdf,.doc,.docx" multiple>
                     </div>
-                    <textarea id="userInput" placeholder="输入消息，或拖拽图片到页面..." rows="1"></textarea>
+                    <textarea id="userInput" placeholder="输入消息，或拖拽图片/文档到页面..." rows="1"></textarea>
                 </div>
                 <button id="sendBtn" onclick="sendMessage()">发送</button>
             </div>
         </div>
     </div>
-    <div class="drop-overlay" id="dropOverlay">释放以上传图片</div>
+    <div class="drop-overlay" id="dropOverlay">释放以上传图片/文档</div>
 
     <script>
         const chatContainer = document.getElementById('chatContainer');
@@ -227,14 +270,19 @@
         const sendBtn = document.getElementById('sendBtn');
         const imagePreview = document.getElementById('imagePreview');
         const previewImg = document.getElementById('previewImg');
+        const imgWrap = document.getElementById('imgWrap');
         const dropOverlay = document.getElementById('dropOverlay');
-        let messages = [];
-        let pendingImage = null; // base64 data URL
+        const fileInput = document.getElementById('fileInput');
+        const fileListBox = document.getElementById('fileListBox');
 
-        // 自适应高度（根据视窗高度设上限），并隐藏可见滚动条
-        function adjustInputHeight(el){
+        let messages = [];
+        let pendingImage = null;
+        let pendingFiles = [];
+
+        // 输入框自适应高度
+        function adjustInputHeight(el) {
             el.style.height = 'auto';
-            const max = Math.floor(window.innerHeight * 0.4); // 40vh
+            const max = Math.floor(window.innerHeight * 0.4);
             const h = Math.min(el.scrollHeight, max);
             el.style.height = h + 'px';
         }
@@ -250,7 +298,7 @@
             }
         });
 
-        // 拖拽逻辑
+        // 拖拽监听
         let dragCounter = 0;
         window.addEventListener('dragenter', (e) => {
             e.preventDefault();
@@ -272,31 +320,91 @@
             dragCounter = 0;
             dropOverlay.classList.remove('active');
             const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleImageFile(files[0]);
-            }
+            Array.from(files).forEach(f => handleUploadFile(f));
         });
 
-        function handleImageFile(file) {
-            if (!file.type.startsWith('image/')) {
-                alert('请上传图片文件');
-                return;
+        // 文件选择弹窗监听
+        fileInput.addEventListener('change', () => {
+            Array.from(fileInput.files).forEach(f => handleUploadFile(f));
+            fileInput.value = '';
+        });
+
+        // 统一处理上传文件
+        function handleUploadFile(file) {
+            if (file.type.startsWith('image/')) {
+                // 处理图片
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    pendingImage = evt.target.result;
+                    previewImg.src = pendingImage;
+                    imgWrap.classList.add('show');
+                    imagePreview.classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // 校验文档格式
+                const allowSuffix = ['.txt', '.md', '.pdf', '.doc', '.docx'];
+                const fileName = file.name.toLowerCase();
+                let isAllow = false;
+                for (let s of allowSuffix) {
+                    if (fileName.endsWith(s)) {
+                        isAllow = true;
+                        break;
+                    }
+                }
+                if (!isAllow) {
+                    alert('仅支持 txt、md、pdf、doc、docx 格式文档');
+                    return;
+                }
+                // 读取文档base64
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    pendingFiles.push({
+                        name: file.name,
+                        base64: evt.target.result,
+                        type: file.type
+                    });
+                    renderFileList();
+                    imagePreview.classList.add('active');
+                };
+                reader.readAsDataURL(file);
             }
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                pendingImage = evt.target.result;
-                previewImg.src = pendingImage;
-                imagePreview.classList.add('active');
-            };
-            reader.readAsDataURL(file);
         }
 
-        function clearImage() {
+        // 渲染文档列表
+        function renderFileList() {
+            fileListBox.innerHTML = '';
+            pendingFiles.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'file-preview-item';
+                div.innerHTML = `<span>${item.name}</span><button onclick="removeFile(${idx})">删除</button>`;
+                fileListBox.appendChild(div);
+            });
+        }
+
+        // 删除单个文档
+        window.removeFile = function(idx) {
+            pendingFiles.splice(idx, 1);
+            renderFileList();
+            checkPreviewBarStatus();
+        }
+
+        // 清空图片
+        window.clearImage = function() {
             pendingImage = null;
             previewImg.src = '';
-            imagePreview.classList.remove('active');
+            imgWrap.classList.remove('show');
+            checkPreviewBarStatus();
         }
 
+        // 判断预览栏是否隐藏（无图无文档则隐藏）
+        function checkPreviewBarStatus() {
+            if (!pendingImage && pendingFiles.length === 0) {
+                imagePreview.classList.remove('active');
+            }
+        }
+
+        // 助手消息渲染
         function appendMessage(role, content) {
             const div = document.createElement('div');
             div.className = `message ${role}`;
@@ -308,43 +416,63 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function appendUserMessage(text, imageUrl) {
+        // 用户消息（图文+文档）渲染
+        function appendUserMessage(text, imageUrl, fileNames) {
             const div = document.createElement('div');
             div.className = 'message user';
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
+
             if (text) {
                 const textDiv = document.createElement('div');
                 textDiv.textContent = text;
                 bubble.appendChild(textDiv);
             }
+            if (fileNames && fileNames.length > 0) {
+                const fileDiv = document.createElement('div');
+                fileDiv.style.marginTop = '8px';
+                fileDiv.textContent = `已上传文档：${fileNames.join('、')}`;
+                bubble.appendChild(fileDiv);
+            }
             if (imageUrl) {
                 const img = document.createElement('img');
                 img.src = imageUrl;
-                img.alt = 'uploaded';
-                if (!text) img.style.marginTop = '0';
+                img.style.marginTop = '8px';
                 bubble.appendChild(img);
             }
+
             div.appendChild(bubble);
             chatContainer.appendChild(div);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
+        // 发送请求
         async function sendMessage() {
             const text = userInput.value.trim();
-            if (!text && !pendingImage) return;
+            if (!text && !pendingImage && pendingFiles.length === 0) return;
 
-            appendUserMessage(text, pendingImage);
+            const fileNames = pendingFiles.map(f => f.name);
+            appendUserMessage(text, pendingImage, fileNames);
+
+            const sendImage = pendingImage;
+            const sendFiles = [...pendingFiles];
+
+            // 1. 先清空文件数组，再清空图片，最后渲染空列表、隐藏预览栏
+            pendingFiles = [];
+            pendingImage = null;
+            previewImg.src = '';
+            imgWrap.classList.remove('show');
+            renderFileList();
+            // 强制移除active，彻底隐藏蓝色预览条
+            imagePreview.classList.remove('active');
+
             userInput.value = '';
             userInput.style.height = 'auto';
 
-            const currentImage = pendingImage;
-            clearImage();
-
-            messages.push({ role: 'user', content: text || '[图片]' });
-
+            messages.push({ role: 'user', content: text || '[图片/文档]' });
             sendBtn.disabled = true;
 
+            // 加载提示
             const loadingId = 'loading-' + Date.now();
             const loadingDiv = document.createElement('div');
             loadingDiv.id = loadingId;
@@ -357,7 +485,11 @@
                 const res = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages: messages, image_url: currentImage })
+                    body: JSON.stringify({
+                        messages: messages,
+                        image_url: sendImage,
+                        upload_files: sendFiles
+                    })
                 });
                 const data = await res.json();
                 document.getElementById(loadingId).remove();
@@ -370,6 +502,13 @@
                 sendBtn.disabled = false;
             }
         }
+        
+        // 点击空白处唤起文件选择（兼容用户习惯）
+        imagePreview.addEventListener('click', function(e) {
+            if(e.target === imagePreview || e.target.id === 'fileListBox'){
+                fileInput.click();
+            }
+        })
     </script>
 </body>
 </html>
