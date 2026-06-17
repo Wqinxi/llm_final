@@ -1,0 +1,16 @@
+# Python
+**/__pycache__/
+
+# Virtual environments
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project specific
+logs/
+scripts/logs/

@@ -28,8 +28,8 @@ class DocAgent:
             "【文档检索结果】\n\n"
             "--- PageIndex 检索结果 ---\n"
             f"{pageindex_result}\n\n"
-            # "--- RAG 检索结果 ---\n"
-            # f"{rag_result}\n"
+            "--- RAG 检索结果 ---\n"
+            f"{rag_result}\n"
         )
         print(f"DEBUG:    [DocAgent] 检索完成，总结果长度={len(combined)}")
         return combined
