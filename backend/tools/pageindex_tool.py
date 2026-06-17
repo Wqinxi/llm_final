@@ -22,7 +22,7 @@ from backend.config import (
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 RAW_DOCS_DIR = os.path.join(PROJECT_ROOT, "data", "raw_docs")
-SUPPORTED_EXTS = {".pdf", ".md", ".markdown"}
+SUPPORTED_EXTS = {".md", ".markdown"}
 
 _pageindex_client = None
 _llm_client = None

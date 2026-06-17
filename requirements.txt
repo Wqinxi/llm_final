@@ -6,5 +6,10 @@ pydantic
 chromadb
 python-docx
 pdfplumber
-# 如需读取 .doc 格式，还需安装 pywin32（Windows 环境下依赖 Word）
-# pywin32
+pywin32
+# pageindex依赖以下库
+litellm==1.83.7
+pymupdf==1.26.4
+PyPDF2==3.0.1
+python-dotenv
+pyyaml==6.0.2

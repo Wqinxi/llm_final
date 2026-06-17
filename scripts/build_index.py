@@ -27,7 +27,7 @@ RAW_DOCS_PATH = os.path.join(PROJECT_ROOT, "data", "raw_docs")
 CHROMA_DB_PATH = os.path.join(PROJECT_ROOT, "data", "chroma_db")
 INDEX_STATE_PATH = os.path.join(PROJECT_ROOT, "data", "index_state.json")
 
-SUPPORTED_EXTS = {".txt", ".md", ".doc", ".docx", ".pdf"}
+SUPPORTED_EXTS = {".txt", ".doc", ".docx", ".pdf"}
 
 
 class ZhipuEmbeddingFunction:

@@ -117,11 +117,3 @@ def rag_search(query: str, top_k: int = 10) -> str:
         lines.append(f"文档片段{i + 1}（来源：{source}）：{doc}")
     formatted = "\n".join(lines)
     return formatted
-
-
-def page_index_search(query: str, page_index: str = "default", top_k: int = 3) -> str:
-    """
-    结构文档 PageIndex RAG 检索工具。
-    当前预留，暂未实现真实检索逻辑。
-    """
-    return "[PageIndex RAG] 预留功能，暂未实现。"
