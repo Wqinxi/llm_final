@@ -14,6 +14,25 @@ class MainAgent:
     def __init__(self):
         self.doc_agent = DocAgent()
         self.image_agent = ImageAgent()
+        # 统一markdown清洗正则，普通/流式接口共用
+        self.markdown_clean_patterns = [
+            (r"#+\s*", ""),
+            (r"\*\*(.+?)\*\*", r"\1"),
+            (r"^[-*]\s+", "", re.MULTILINE),
+            (r"[-]{3,}", ""),
+            (r"`+", ""),
+            (r"\n{2,}", "\n\n")
+        ]
+
+    def _clean_markdown(self, text: str) -> str:
+        """公共markdown清洗函数，普通/流式接口共用"""
+        res = text
+        for pat, repl, *flags in self.markdown_clean_patterns:
+            if flags:
+                res = re.sub(pat, repl, res, flags=flags[0])
+            else:
+                res = re.sub(pat, repl, res)
+        return res.strip()
 
     def _plan_tasks(self, user_message: str, has_image: bool, has_upload_files: bool) -> dict:
         """
@@ -66,7 +85,7 @@ class MainAgent:
 - 如果不需要调用Agent，直接返回 {{"steps": [], "final_intent": "直接回答"}}
 - 确保JSON格式正确
 """
-        
+
         try:
             response = client.chat.completions.create(
                 model=MAIN_MODEL,
@@ -82,73 +101,12 @@ class MainAgent:
                     return plan
         except Exception as e:
             print(f"ERROR:    [MainAgent] 任务规划失败: {e}")
-        
+
         # 默认：直接回答
         return {"steps": [], "final_intent": "直接回答"}
 
-    def run(self, messages: list, image_url: str = None, upload_doc_content: str = "") -> str:
-        """
-        主 Agent 运行逻辑：
-        1. 任务规划：决定调用哪些Agent及调用顺序
-        2. 按顺序执行Agent，收集上下文
-        3. 汇总上传文档、检索文档信息，生成最终回答
-        """
-        user_message = messages[-1]["content"] if messages else ""
-
-        # 任务规划
-        plan = self._plan_tasks(user_message, has_image=bool(image_url), has_upload_files=bool(upload_doc_content))
-        print(f"DEBUG:    [MainAgent] 任务规划: {json.dumps(plan, ensure_ascii=False)}")
-
-        context_parts = []
-        # 先放入用户上传本地解析的文档内容
-        if upload_doc_content.strip():
-            context_parts.append(f"【用户上传本地文档内容】\n{upload_doc_content}")
-        previous_results = {}  # 存储各步骤的结果，供后续步骤引用
-
-        # 按顺序执行规划的任务
-        for i, step in enumerate(plan.get("steps", [])):
-            agent_type = step.get("agent")
-            query = step.get("query", "")
-            reason = step.get("reason", "")
-            
-            print(f"DEBUG:    [MainAgent] 执行步骤 {i+1}: {agent_type} - {reason}")
-            
-            if agent_type == "image" and image_url:
-                # 调用 ImageAgent
-                result = self.image_agent.run(image_url, query=query)
-                context_parts.append(result)
-                previous_results[f"step_{i+1}_image"] = result
-                
-            elif agent_type == "doc":
-                # 拿到规划时生成的纯意图短句（无占位符）
-                intent_query = step.get("query", "")
-                prev_step_key = f"step_{i}_image"
-                if prev_step_key in previous_results:
-                    # 获取真实图片识别输出
-                    image_result = previous_results[prev_step_key]
-                    # 提取核心实体，精简图片内容，避免超长文本
-                    core_entity = self._extract_key_info(image_result)
-                    formatted_query = f"{intent_query}：{core_entity}"
-                    # 清洗换行、多余空格
-                    formatted_query = re.sub(r"\s+", " ", formatted_query).strip()
-                    print(f"DEBUG:    [MainAgent] 意图:{intent_query}，提取实体:{core_entity}，最终检索query:{formatted_query}")
-                else:
-                    # 无前置图片步骤，直接使用规划的意图作为检索词
-                    formatted_query = intent_query
-
-                result = self.doc_agent.run(formatted_query)
-                context_parts.append(result)
-                previous_results[f"step_{i+1}_doc"] = result
-                
-            else:
-                print(f"DEBUG:    [MainAgent] 跳过步骤 {i+1}: 条件不满足")
-
-        if not context_parts:
-            print("DEBUG:    [MainAgent] 无需调用子Agent，直接由大模型回答")
-
-        print(f"DEBUG:    [MainAgent] 收集到的参考信息片段数: {len(context_parts)}")
-
-        # 构建最终 prompt
+    def _build_final_messages(self, messages: list, context_parts: list) -> list:
+        """公共函数：构建最终传给大模型的完整消息列表，普通/流式接口完全复用"""
         system_prompt = "你是一个智能助手。请根据用户问题"
         if context_parts:
             system_prompt += """
@@ -176,6 +134,69 @@ class MainAgent:
                     f"\n\n--- 全部参考信息（本地上传文档+知识库检索） ---\n"
                     f"{context_str}"
                 )
+        return full_messages
+
+    def run(self, messages: list, image_url: str = None, upload_doc_content: str = "") -> str:
+        """
+        同步一次性输出接口逻辑，无流式
+        """
+        user_message = messages[-1]["content"] if messages else ""
+
+        # 任务规划
+        plan = self._plan_tasks(user_message, has_image=bool(image_url), has_upload_files=bool(upload_doc_content))
+        print(f"DEBUG:    [MainAgent] 任务规划: {json.dumps(plan, ensure_ascii=False)}")
+
+        context_parts = []
+        # 先放入用户上传本地解析的文档内容
+        if upload_doc_content.strip():
+            context_parts.append(f"【用户上传本地文档内容】\n{upload_doc_content}")
+        previous_results = {}  # 存储各步骤的结果，供后续步骤引用
+
+        # 按顺序执行规划的任务
+        for i, step in enumerate(plan.get("steps", [])):
+            agent_type = step.get("agent")
+            query = step.get("query", "")
+            reason = step.get("reason", "")
+
+            print(f"DEBUG:    [MainAgent] 执行步骤 {i+1}: {agent_type} - {reason}")
+
+            if agent_type == "image" and image_url:
+                # 调用 ImageAgent
+                result = self.image_agent.run(image_url, query=query)
+                context_parts.append(result)
+                previous_results[f"step_{i+1}_image"] = result
+
+            elif agent_type == "doc":
+                # 拿到规划时生成的纯意图短句（无占位符）
+                intent_query = step.get("query", "")
+                prev_step_key = f"step_{i}_image"
+                if prev_step_key in previous_results:
+                    # 获取真实图片识别输出
+                    image_result = previous_results[prev_step_key]
+                    # 提取核心实体，精简图片内容，避免超长文本
+                    core_entity = self._extract_key_info(image_result)
+                    formatted_query = f"{intent_query}：{core_entity}"
+                    # 清洗换行、多余空格
+                    formatted_query = re.sub(r"\s+", " ", formatted_query).strip()
+                    print(f"DEBUG:    [MainAgent] 意图:{intent_query}，提取实体:{core_entity}，最终检索query:{formatted_query}")
+                else:
+                    # 无前置图片步骤，直接使用规划的意图作为检索词
+                    formatted_query = intent_query
+
+                result = self.doc_agent.run(formatted_query)
+                context_parts.append(result)
+                previous_results[f"step_{i+1}_doc"] = result
+
+            else:
+                print(f"DEBUG:    [MainAgent] 跳过步骤 {i+1}: 条件不满足")
+
+        if not context_parts:
+            print("DEBUG:    [MainAgent] 无需调用子Agent，直接由大模型回答")
+
+        print(f"DEBUG:    [MainAgent] 收集到的参考信息片段数: {len(context_parts)}")
+
+        # 复用公共方法构建消息
+        full_messages = self._build_final_messages(messages, context_parts)
 
         try:
             response = client.chat.completions.create(
@@ -184,17 +205,126 @@ class MainAgent:
                 temperature=0.1,
             )
             raw_ans = response.choices[0].message.content.strip()
-            # 后置清洗markdown
-            import re
-            res = re.sub(r"#+\s*", "", raw_ans)
-            res = re.sub(r"\*\*(.+?)\*\*", r"\1", res)
-            res = re.sub(r"^[-*]\s+", "", res, flags=re.MULTILINE)
-            res = re.sub(r"[-]{3,}", "", res)
-            res = re.sub(r"`+", "", res)
-            res = re.sub(r"\n{2,}", "\n\n", res).strip()
+            # 公共清洗markdown
+            res = self._clean_markdown(raw_ans)
             return res
         except Exception as e:
             return f"请求失败: {str(e)}"
+
+    async def stream_run(self, messages: list, image_url: str = None, upload_doc_content: str = "", log_callback=None):
+        """
+        流式执行逻辑
+        1. 后台print调试日志与run()完全一致，用于后端排查
+        2. log_callback输出给前端的是业务友好流程日志，无技术术语、无原始规划JSON、无时间戳
+        :param log_callback: 回调函数，用于推送前端SSE业务流程日志
+        """
+        user_message = messages[-1]["content"] if messages else ""
+
+        # ========== 1. 任务规划：后台打印原始调试信息，前端不展示规划JSON ==========
+        plan = self._plan_tasks(user_message, has_image=bool(image_url), has_upload_files=bool(upload_doc_content))
+        # 后台保留完整调试打印，不影响开发排查
+        print(f"DEBUG:    [MainAgent] 任务规划: {json.dumps(plan, ensure_ascii=False)}")
+        
+        # 前端仅输出极简业务提示，隐藏内部JSON、技术名词
+        if log_callback:
+            yield log_callback("开始处理你的提问")
+            yield log_callback("  正在分析你的需求，确认需要哪些参考资料")
+
+        context_parts = []
+        if upload_doc_content.strip():
+            context_parts.append(f"【用户上传本地文档内容】\n{upload_doc_content}")
+        previous_results = {}
+
+        # ========== 2. 顺序执行子任务，前端日志全部改为业务化描述，统一缩进 ==========
+        if log_callback:
+            yield log_callback("  开始收集相关参考内容")
+
+        for i, step in enumerate(plan.get("steps", [])):
+            agent_type = step.get("agent")
+            query = step.get("query", "")
+            reason = step.get("reason", "")
+
+            # 后台调试打印完全保留，和run()对齐
+            print(f"DEBUG:    [MainAgent] 执行步骤 {i+1}: {agent_type} - {reason}")
+
+            if agent_type == "image" and image_url:
+                # 前端业务友好文案，无ImageAgent技术词
+                if log_callback:
+                    yield log_callback("    正在识别图片中的内容")
+                result = self.image_agent.run(image_url, query=query)
+                context_parts.append(result)
+                previous_results[f"step_{i+1}_image"] = result
+                if log_callback:
+                    yield log_callback("    图片内容识别完成")
+
+            elif agent_type == "doc":
+                intent_query = step.get("query", "")
+                prev_step_key = f"step_{i}_image"
+                if prev_step_key in previous_results:
+                    image_result = previous_results[prev_step_key]
+                    core_entity = self._extract_key_info(image_result)
+                    formatted_query = f"{intent_query}：{core_entity}"
+                    formatted_query = re.sub(r"\s+", " ", formatted_query).strip()
+                    # 后台调试打印不变
+                    print(f"DEBUG:    [MainAgent] 意图:{intent_query}，提取实体:{core_entity}，最终检索query:{formatted_query}")
+                    # 前端简化业务描述，不暴露检索关键词细节
+                    if log_callback:
+                        yield log_callback("    根据图片内容查找相关资料")
+                else:
+                    # 纯文字查询友好文案
+                    if log_callback:
+                        yield log_callback("    根据你的文字描述查找相关资料")
+                    formatted_query = intent_query
+
+                result = self.doc_agent.run(formatted_query)
+                context_parts.append(result)
+                previous_results[f"step_{i+1}_doc"] = result
+                if log_callback:
+                    yield log_callback("    相关资料查找完成")
+            else:
+                # 跳过步骤前端简化提示
+                print(f"DEBUG:    [MainAgent] 跳过步骤 {i+1}: 条件不满足")
+                if log_callback:
+                    yield log_callback("    当前无需额外查询资料，跳过该环节")
+
+        # 后台调试日志对齐run()
+        if not context_parts:
+            print("DEBUG:    [MainAgent] 无需调用子Agent，直接由大模型回答")
+        print(f"DEBUG:    [MainAgent] 收集到的参考信息片段数: {len(context_parts)}")
+
+        # 前端收尾流程提示，业务化文案
+        if log_callback:
+            yield log_callback(f"  全部参考内容收集完成，共整理 {len(context_parts)} 份相关资料")
+            yield log_callback("  正在整合所有信息，为你生成完整回答")
+
+        # ========== 3. 构建消息完全复用公共函数 ==========
+        full_messages = self._build_final_messages(messages, context_parts)
+
+        # ========== 4. 模型流式输出，统一markdown清洗 ==========
+        try:
+            stream = client.chat.completions.create(
+                model=MAIN_MODEL,
+                messages=full_messages,
+                temperature=0.1,
+                stream=True
+            )
+            full_raw_buffer = ""
+            full_clean_buffer = ""
+            for chunk in stream:
+                if chunk.choices and chunk.choices[0].delta.content:
+                    raw_text = chunk.choices[0].delta.content
+                    full_raw_buffer += raw_text
+                    # 全局清洗完整文本
+                    current_clean = self._clean_markdown(full_raw_buffer)
+                    # 只输出增量清洗内容
+                    delta_clean = current_clean[len(full_clean_buffer):]
+                    full_clean_buffer = current_clean
+                    yield delta_clean
+            # 输出结束标记
+            yield None
+        except Exception as e:
+            yield f"请求失败: {str(e)}"
+            yield None
 
     def _extract_key_info(self, text: str) -> str:
         """
@@ -202,11 +332,11 @@ class MainAgent:
         """
         # 移除前缀，获取实际内容
         clean_text = text.replace("【图像识别结果】\n", "").replace("【文档检索结果】\n", "").strip()
-        
+
         # 如果内容很短，直接返回
         if len(clean_text) <= 20:
             return clean_text
-        
+
         prompt = f"""请从以下文本中提取最核心的实体名称（如菜品名、产品名、物品名等），用于文档检索。
 只需要输出名称，不要其他解释。如果无法确定，输出"提取失败"。
 
@@ -223,14 +353,14 @@ class MainAgent:
             key_info = response.choices[0].message.content.strip()
             # 清理
             key_info = key_info.replace("核心名称：", "").replace("\"", "").strip()
-            
+
             # 检查提取结果是否有效
             if key_info and key_info not in ["", "未知", "提取失败", "无"]:
                 print(f"DEBUG:    [MainAgent] 提取到关键词: {key_info}")
                 return key_info
         except Exception as e:
             print(f"ERROR:    [MainAgent] 提取关键信息失败: {e}")
-        
+
         # 如果提取失败，返回清理后的文本前30字符
         fallback = clean_text[:30].replace("\n", " ").strip()
         print(f"DEBUG:    [MainAgent] 使用fallback关键词: {fallback}")

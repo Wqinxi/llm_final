@@ -120,7 +120,6 @@
             border-radius: 16px;
         }
         .image-preview-bar.active { display: flex; }
-        /* 无图片时图片预览隐藏不占位 */
         .img-wrap {
             display: none;
             align-items: center;
@@ -144,7 +143,6 @@
             font-size: 13px;
             cursor: pointer;
         }
-        /* 文档预览样式 */
         .file-preview-item {
             display: flex;
             align-items: center;
@@ -224,6 +222,52 @@
             pointer-events: none;
         }
         .drop-overlay.active { display: flex; }
+
+        /* ========== 气泡内流程日志面板样式 ========== */
+        .agent-log-box {
+            margin-bottom: 12px;
+            border: 1px solid #c5d4eb;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f7faff;
+        }
+        .agent-log-header {
+            padding: 8px 12px;
+            background: #e8f0fe;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .agent-log-header span {
+            font-size: 13px;
+            color: #2c426b;
+        }
+        .agent-log-toggle {
+            border: none;
+            background: #3d8be1;
+            color: white;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .agent-log-content {
+            padding: 10px 12px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            color: #222;
+        }
+        .agent-log-content.fold {
+            display: none;
+        }
+        .final-answer-text {
+            white-space: pre-wrap;
+        }
+
         @media (max-width: 800px) {
             body { padding: 20px; }
             .page-shell { border-radius: 26px; }
@@ -246,14 +290,11 @@
             <div class="input-area">
                 <div class="input-wrapper">
                     <div class="image-preview-bar" id="imagePreview">
-                        <!-- 图片容器，无图片自动隐藏 -->
                         <div class="img-wrap" id="imgWrap">
                             <img id="previewImg" src="" alt="preview">
                             <button onclick="clearImage()">删除图片</button>
                         </div>
-                        <!-- 文档列表容器 -->
                         <div id="fileListBox"></div>
-                        <!-- 隐藏的文件输入框，仅拖拽/文件选择弹窗使用 -->
                         <input type="file" id="fileInput" accept=".txt,.md,.pdf,.doc,.docx" multiple>
                     </div>
                     <textarea id="userInput" placeholder="输入消息，或拖拽图片/文档到页面..." rows="1"></textarea>
@@ -278,6 +319,11 @@
         let messages = [];
         let pendingImage = null;
         let pendingFiles = [];
+        let eventSource = null;
+        let currentAssistantWrap = null;
+        let currentLogContentEl = null;
+        let currentAnswerTextEl = null;
+        let logFoldState = false;
 
         // 输入框自适应高度
         function adjustInputHeight(el) {
@@ -332,7 +378,6 @@
         // 统一处理上传文件
         function handleUploadFile(file) {
             if (file.type.startsWith('image/')) {
-                // 处理图片
                 const reader = new FileReader();
                 reader.onload = function(evt) {
                     pendingImage = evt.target.result;
@@ -342,7 +387,6 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                // 校验文档格式
                 const allowSuffix = ['.txt', '.md', '.pdf', '.doc', '.docx'];
                 const fileName = file.name.toLowerCase();
                 let isAllow = false;
@@ -356,7 +400,6 @@
                     alert('仅支持 txt、md、pdf、doc、docx 格式文档');
                     return;
                 }
-                // 读取文档base64
                 const reader = new FileReader();
                 reader.onload = function(evt) {
                     pendingFiles.push({
@@ -397,29 +440,17 @@
             checkPreviewBarStatus();
         }
 
-        // 判断预览栏是否隐藏（无图无文档则隐藏）
+        // 判断预览栏是否隐藏
         function checkPreviewBarStatus() {
             if (!pendingImage && pendingFiles.length === 0) {
                 imagePreview.classList.remove('active');
             }
         }
 
-        // 助手消息渲染
-        function appendMessage(role, content) {
-            const div = document.createElement('div');
-            div.className = `message ${role}`;
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            bubble.textContent = content;
-            div.appendChild(bubble);
-            chatContainer.appendChild(div);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        // 用户消息（图文+文档）渲染
+        // 用户消息渲染
         function appendUserMessage(text, imageUrl, fileNames) {
             const div = document.createElement('div');
-            div.className = 'message user';
+            div.className = `message user`;
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
 
@@ -446,10 +477,90 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // 发送请求
+        // 创建带流程日志面板的助手气泡
+        function createAssistantMessageWrap() {
+            const msgWrap = document.createElement('div');
+            msgWrap.className = 'message assistant';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+
+            // 流程日志容器
+            const logBox = document.createElement('div');
+            logBox.className = 'agent-log-box';
+
+            const logHeader = document.createElement('div');
+            logHeader.className = 'agent-log-header';
+            logHeader.innerHTML = `
+                <span id="agent-log-title">正在思考</span>
+                <button class="agent-log-toggle">收起</button>
+            `;
+            const toggleBtn = logHeader.querySelector('.agent-log-toggle');
+
+            const logContent = document.createElement('div');
+            logContent.className = 'agent-log-content';
+
+            // 折叠切换逻辑
+            toggleBtn.onclick = () => {
+                logFoldState = !logFoldState;
+                if (logFoldState) {
+                    logContent.classList.add('fold');
+                    toggleBtn.innerText = '展开';
+                } else {
+                    logContent.classList.remove('fold');
+                    toggleBtn.innerText = '收起';
+                }
+            };
+
+            logBox.appendChild(logHeader);
+            logBox.appendChild(logContent);
+
+            // 最终回答文本容器
+            const answerText = document.createElement('div');
+            answerText.className = 'final-answer-text';
+
+            bubble.appendChild(logBox);
+            bubble.appendChild(answerText);
+            msgWrap.appendChild(bubble);
+            chatContainer.appendChild(msgWrap);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            return {
+                wrap: msgWrap,
+                logContentEl: logContent,
+                answerEl: answerText,
+                toggleBtn,
+                titleEl: logHeader.querySelector('#agent-log-title')
+            };
+        }
+
+        // 追加一行日志
+        function appendLogLine(el, text) {
+            el.innerText += `${text}\n`;
+            el.scrollTop = el.scrollHeight;
+        }
+        function cleanMarkdown(text) {
+            if (!text) return text;
+            return text
+                .replace(/#+\s*/g, '')                    // 去除标题标记
+                .replace(/\*\*(.+?)\*\*/g, '$1')         // 去除粗体 **text**
+                .replace(/\*(.+?)\*/g, '$1')             // 去除斜体 *text*
+                .replace(/^[-*+]\s*/gm, '')              // 去除列表标记（空格可选）
+                .replace(/[-]{3,}/g, '')                 // 去除分割线
+                .replace(/`+/g, '')                      // 去除反引号
+                .replace(/\n{2,}/g, '\n\n')              // 规范化换行
+                .trim();
+        }
+        // 发送消息 POST流式Fetch（替代EventSource，解决405/422/URL超长）
         async function sendMessage() {
             const text = userInput.value.trim();
             if (!text && !pendingImage && pendingFiles.length === 0) return;
+
+            // 记录思考开始时间
+            const thinkStartTime = Date.now();
+
+            // 关闭上一轮连接标记
+            let abortController = new AbortController();
 
             const fileNames = pendingFiles.map(f => f.name);
             appendUserMessage(text, pendingImage, fileNames);
@@ -457,53 +568,101 @@
             const sendImage = pendingImage;
             const sendFiles = [...pendingFiles];
 
-            // 1. 先清空文件数组，再清空图片，最后渲染空列表、隐藏预览栏
+            // 清空输入区域
             pendingFiles = [];
             pendingImage = null;
             previewImg.src = '';
             imgWrap.classList.remove('show');
             renderFileList();
-            // 强制移除active，彻底隐藏蓝色预览条
             imagePreview.classList.remove('active');
-
             userInput.value = '';
             userInput.style.height = 'auto';
 
             messages.push({ role: 'user', content: text || '[图片/文档]' });
             sendBtn.disabled = true;
 
-            // 加载提示
-            const loadingId = 'loading-' + Date.now();
-            const loadingDiv = document.createElement('div');
-            loadingDiv.id = loadingId;
-            loadingDiv.className = 'message assistant';
-            loadingDiv.innerHTML = '<div class="bubble loading">思考中...</div>';
-            chatContainer.appendChild(loadingDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            // 新建助手气泡，内置日志面板
+            const res = createAssistantMessageWrap();
+            currentAssistantWrap = res.wrap;
+            currentLogContentEl = res.logContentEl;
+            currentAnswerTextEl = res.answerEl;
+            logFoldState = false;
+            let fullAnswer = "";
+
+            // 请求体
+            const payload = {
+                messages: messages,
+                image_url: sendImage,
+                upload_files: sendFiles
+            };
 
             try {
-                const res = await fetch('/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: messages,
-                        image_url: sendImage,
-                        upload_files: sendFiles
-                    })
+                // POST请求流式读取
+                const response = await fetch("/chat-stream", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                    signal: abortController.signal
                 });
-                const data = await res.json();
-                document.getElementById(loadingId).remove();
-                appendMessage('assistant', data.content);
-                messages.push({ role: 'assistant', content: data.content });
+
+                if (!response.ok) throw new Error("接口请求异常");
+
+                // 流式解析SSE数据
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let buffer = "";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    // 按SSE换行分割data块
+                    const blocks = buffer.split("\n\n");
+                    buffer = blocks.pop();
+
+                    for (const block of blocks) {
+                        if (!block.startsWith("data: ")) continue;
+                        const jsonStr = block.replace("data: ", "").trim();
+                        if (!jsonStr) continue;
+                        const data = JSON.parse(jsonStr);
+                        switch (data.type) {
+                            case "log":
+                                appendLogLine(currentLogContentEl, data.content);
+                                break;
+                            case "answer":
+                                // 第一次收到回答内容时，折叠思考框并更新标题
+                                if (!fullAnswer) {
+                                    const thinkDuration = ((Date.now() - thinkStartTime) / 1000).toFixed(1);
+                                    res.titleEl.innerText = `已思考（用时${thinkDuration}秒）`;
+                                    logFoldState = true;
+                                    currentLogContentEl.classList.add('fold');
+                                    res.toggleBtn.innerText = '展开';
+                                }
+                                const cleanChunk = cleanMarkdown(data.content);
+                                fullAnswer += cleanChunk;
+                                currentAnswerTextEl.innerText = fullAnswer;
+                                chatContainer.scrollTop = chatContainer.scrollHeight;
+                                break;
+                            case "finish":
+                                appendLogLine(currentLogContentEl, data.msg);
+                                messages.push({ role: "assistant", content: fullAnswer });
+                                break;
+                        }
+                    }
+                }
             } catch (err) {
-                document.getElementById(loadingId).remove();
-                appendMessage('assistant', '请求失败，请稍后重试。');
+                appendLogLine(currentLogContentEl, "连接异常，请求中断：" + err.message);
+                if (!fullAnswer) {
+                    currentAnswerTextEl.innerText = "请求失败，请稍后重试";
+                }
             } finally {
                 sendBtn.disabled = false;
             }
         }
-        
-        // 点击空白处唤起文件选择（兼容用户习惯）
+        // 点击空白预览区域唤起文件选择
         imagePreview.addEventListener('click', function(e) {
             if(e.target === imagePreview || e.target.id === 'fileListBox'){
                 fileInput.click();

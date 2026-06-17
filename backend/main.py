@@ -1,14 +1,16 @@
 import os
 import sys
+import json
+from typing import AsyncGenerator
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 
-from backend.models.schemas import ChatRequest, ChatResponse
+from backend.models.schemas import ChatRequest
 from backend.agents.main_agent import MainAgent
 from backend.tools.doc_parser import parse_document
 
@@ -33,13 +35,13 @@ async def startup_event():
     except Exception as e:
         print(f"WARNING:  向量数据库加载失败: {e}")
 
-@app.post("/chat", response_model=ChatResponse)
+# 普通一次性接口（无改动，底层逻辑已统一）
+@app.post("/chat")
 async def chat(req: ChatRequest):
     msgs = [{"role": m.role, "content": m.content} for m in req.messages]
     image_url = req.image_url
     upload_files = req.upload_files
 
-    # 解析所有上传文档，拼接完整文档文本
     doc_context = ""
     for file_item in upload_files:
         text = parse_document(file_item.name, file_item.base64)
@@ -48,10 +50,65 @@ async def chat(req: ChatRequest):
     answer = main_agent.run(
         messages=msgs,
         image_url=image_url,
-        upload_doc_content=doc_context  # 新增参数传递文档解析内容
+        upload_doc_content=doc_context
     )
-    return ChatResponse(content=answer)
+    return {"content": answer}
 
+# 流式生成器：仅封装SSE协议，无任何业务逻辑
+async def stream_chat(req: ChatRequest) -> AsyncGenerator[str, None]:
+    msgs = [{"role": m.role, "content": m.content} for m in req.messages]
+    image_url = req.image_url
+    upload_files = req.upload_files
+
+    # 解析上传文档（仅入参处理）
+    doc_context = ""
+    for file_item in upload_files:
+        text = parse_document(file_item.name, file_item.base64)
+        doc_context += text + "\n\n"
+
+    # 封装SSE日志生成函数，传给agent作为回调
+    def create_sse_log_yielder(log_text: str):
+        log_data = json.dumps({"type": "log", "content": log_text}, ensure_ascii=False)
+        return f"data: {log_data}\n\n"
+
+    # 调用统一流式agent，传入日志回调
+    agent_stream = main_agent.stream_run(
+        messages=msgs,
+        image_url=image_url,
+        upload_doc_content=doc_context,
+        log_callback=create_sse_log_yielder
+    )
+
+    # 遍历agent产出的每一段（日志行 / 回答文本 / 结束标记）
+    async for chunk in agent_stream:
+        if chunk is None:
+            # 模型输出完成，推送结束事件
+            finish_data = json.dumps({"type": "finish", "msg": "全部流程执行结束，回答生成完成"}, ensure_ascii=False)
+            yield f"data: {finish_data}\n\n"
+            break
+        # chunk分两种：SSE日志字符串 / 回答文本增量
+        if chunk.startswith("data: "):
+            # 是日志，直接下发
+            yield chunk
+        else:
+            # 是回答文本，包装answer类型下发
+            ans_data = json.dumps({"type": "answer", "content": chunk}, ensure_ascii=False)
+            yield f"data: {ans_data}\n\n"
+
+# 流式SSE接口
+@app.post("/chat-stream", response_class=StreamingResponse)
+async def chat_stream(req: ChatRequest):
+    generator = stream_chat(req)
+    return StreamingResponse(
+        generator,
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Content-Type-Options": "nosniff"
+        }
+    )
+
+# 静态页面路由
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
