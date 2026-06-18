@@ -654,7 +654,9 @@
 
         // 追加一行日志
         function appendLogLine(el, text) {
-            el.innerText += `${text}\n`;
+            const line = document.createElement('div');
+            line.textContent = text;
+            el.appendChild(line);
             el.scrollTop = el.scrollHeight;
         }
         function cleanMarkdown(text) {

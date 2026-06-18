@@ -136,9 +136,9 @@ class MainAgent:
                 )
         return full_messages
 
-    def run(self, messages: list, image_url: str = None, upload_doc_content: str = "") -> str:
+    async def run(self, messages: list, image_url: str = None, upload_doc_content: str = "") -> str:
         """
-        同步一次性输出接口逻辑，无流式
+        同步一次性输出接口逻辑（内部已改为 async，方便复用子 agent 的 async generator）
         """
         user_message = messages[-1]["content"] if messages else ""
 
@@ -162,7 +162,10 @@ class MainAgent:
 
             if agent_type == "image" and image_url:
                 # 调用 ImageAgent
-                result = self.image_agent.run(image_url, query=query)
+                result = None
+                async for tag, value in self.image_agent.run(image_url, query=query, log_callback=None):
+                    if tag == "result":
+                        result = value
                 context_parts.append(result)
                 previous_results[f"step_{i+1}_image"] = result
 
@@ -183,7 +186,10 @@ class MainAgent:
                     # 无前置图片步骤，直接使用规划的意图作为检索词
                     formatted_query = intent_query
 
-                result = self.doc_agent.run(formatted_query)
+                result = None
+                async for tag, value in self.doc_agent.run(formatted_query, log_callback=None):
+                    if tag == "result":
+                        result = value
                 context_parts.append(result)
                 previous_results[f"step_{i+1}_doc"] = result
 
@@ -251,7 +257,12 @@ class MainAgent:
                 # 前端业务友好文案，无ImageAgent技术词
                 if log_callback:
                     yield log_callback("    正在识别图片中的内容")
-                result = self.image_agent.run(image_url, query=query)
+                result = None
+                async for tag, value in self.image_agent.run(image_url, query=query, log_callback=log_callback):
+                    if tag == "log":
+                        yield value
+                    elif tag == "result":
+                        result = value
                 context_parts.append(result)
                 previous_results[f"step_{i+1}_image"] = result
                 if log_callback:
@@ -276,7 +287,12 @@ class MainAgent:
                         yield log_callback("    根据你的文字描述查找相关资料")
                     formatted_query = intent_query
 
-                result = self.doc_agent.run(formatted_query)
+                result = None
+                async for tag, value in self.doc_agent.run(formatted_query, log_callback=log_callback):
+                    if tag == "log":
+                        yield value
+                    elif tag == "result":
+                        result = value
                 context_parts.append(result)
                 previous_results[f"step_{i+1}_doc"] = result
                 if log_callback:

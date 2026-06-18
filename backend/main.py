@@ -47,7 +47,7 @@ async def chat(req: ChatRequest):
         text = parse_document(file_item.name, file_item.base64)
         doc_context += text + "\n\n"
 
-    answer = main_agent.run(
+    answer = await main_agent.run(
         messages=msgs,
         image_url=image_url,
         upload_doc_content=doc_context
