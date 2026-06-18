@@ -17,5 +17,8 @@ class ChatRequest(BaseModel):
     upload_files: Optional[List[UploadFileItem]] = Field(default_factory=list)
 
 
+class BuildKnowledgeRequest(BaseModel):
+    files: List[UploadFileItem]
+
 class ChatResponse(BaseModel):
     content: str

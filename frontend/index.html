@@ -98,8 +98,8 @@
         }
         .input-area {
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 14px;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
             align-items: end;
             background: #ffffff;
             border: 1px solid rgba(184, 120, 77, 0.16);
@@ -169,6 +169,12 @@
             font-size: 12px;
             padding: 2px 8px;
             cursor: pointer;
+        }
+        #fileListBox {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
         }
         #fileInput {
             display: none;
@@ -276,9 +282,114 @@
             .page-shell { border-radius: 26px; }
             .page-content { padding: 22px 20px 26px; }
             .page-header { font-size: 22px; padding: 24px 20px; }
-            .input-area { grid-template-columns: 1fr; }
-            button#sendBtn { width: 100%; }
+            .input-area { grid-template-columns: 1fr auto auto; }
+            button#sendBtn { min-width: 90px; padding: 0 14px; }
         }
+
+        /* ========== 模式切换 ========== */
+        .mode-switch { position: relative; display: flex; align-items: center; }
+        .mode-btn {
+            height: 50px; width: 44px;
+            background: #f7f8fb;
+            border: 1px solid rgba(184,120,77,0.18);
+            border-radius: 14px;
+            cursor: pointer; color: #e67e22;
+            font-size: 16px; display: flex;
+            align-items: center; justify-content: center;
+            transition: background .2s;
+        }
+        .mode-btn:hover { background: #fff5eb; }
+        .mode-menu {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            right: 0;
+            background: #fff;
+            border: 1px solid #e0d5cd;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            min-width: 170px;
+            overflow: hidden;
+            z-index: 100;
+        }
+        .mode-menu.show { display: block; }
+        .mode-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .mode-item:hover { background: #fff5eb; }
+        .mode-item.active { color: #e67e22; font-weight: 600; }
+        .mode-check { font-size: 13px; }
+
+        /* ========== 构建模式上传区域 ========== */
+        .upload-btn-area {
+            width: 100%;
+            border: 2px dashed rgba(184,120,77,0.3);
+            border-radius: 18px;
+            padding: 18px;
+            text-align: center;
+            color: #9e7b60;
+            font-size: 15px;
+            cursor: pointer;
+            background: #f7f8fb;
+            transition: all .2s ease;
+            display: none;
+            line-height: 1.5;
+        }
+        .upload-btn-area.show { display: block; }
+        .upload-btn-area:hover,
+        .upload-btn-area.dragover {
+            border-color: #e67e22;
+            background: #fff5eb;
+            color: #e67e22;
+        }
+
+        /* ========== 构建进度面板 ========== */
+        .build-log-box {
+            margin-bottom: 12px;
+            border: 1px solid #ebd4c5;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fffaf7;
+        }
+        .build-log-header {
+            padding: 8px 12px;
+            background: #fee8d8;
+            font-size: 13px;
+            color: #6b422c;
+            font-weight: 600;
+        }
+        .build-log-content {
+            padding: 10px 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #222;
+        }
+        .build-file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #f5e0d0;
+        }
+        .build-file-item:last-child { border-bottom: none; }
+        .build-file-name { max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .build-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        .build-status.building { background: #e67e22; color: white; }
+        .build-status.saved { background: #3498db; color: white; }
+        .build-status.done { background: #27ae60; color: white; }
+        .build-status.error { background: #e74c3c; color: white; }
 
         /* ========== 背景食物图片流 ========== */
         .food-flow-bg {
@@ -344,7 +455,7 @@
             <div class="chat-panel">
                 <div class="chat-container" id="chatContainer"></div>
             </div>
-            <div class="input-area">
+            <div class="input-area" id="inputArea">
                 <div class="input-wrapper">
                     <div class="image-preview-bar" id="imagePreview">
                         <div class="img-wrap" id="imgWrap">
@@ -355,6 +466,18 @@
                         <input type="file" id="fileInput" accept=".txt,.md,.pdf,.doc,.docx" multiple>
                     </div>
                     <textarea id="userInput" placeholder="输入消息，或拖拽图片/文档到页面..." rows="1"></textarea>
+                    <div id="uploadBtnArea" class="upload-btn-area">点击或拖拽上传文档（支持 pdf, txt, md, doc, docx）</div>
+                </div>
+                <div class="mode-switch">
+                    <button class="mode-btn" id="modeBtn" onclick="toggleModeMenu()" title="切换模式">▲</button>
+                    <div class="mode-menu" id="modeMenu">
+                        <div class="mode-item active" data-mode="chat" onclick="setMode('chat')">
+                            <span>知识问答</span><span class="mode-check" id="check-chat">✓</span>
+                        </div>
+                        <div class="mode-item" data-mode="build" onclick="setMode('build')">
+                            <span>构建知识库</span><span class="mode-check" id="check-build" style="visibility:hidden;">✓</span>
+                        </div>
+                    </div>
                 </div>
                 <button id="sendBtn" onclick="sendMessage()">发送</button>
             </div>
@@ -442,6 +565,181 @@
         let currentLogContentEl = null;
         let currentAnswerTextEl = null;
         let logFoldState = false;
+        let currentMode = 'chat';
+        let buildFiles = [];
+        let buildFileStatusMap = {};
+        let currentBuildLogBox = null;
+
+        const modeBtn = document.getElementById('modeBtn');
+        const modeMenu = document.getElementById('modeMenu');
+        const uploadBtnArea = document.getElementById('uploadBtnArea');
+        const checkChat = document.getElementById('check-chat');
+        const checkBuild = document.getElementById('check-build');
+
+        function toggleModeMenu() {
+            modeMenu.classList.toggle('show');
+        }
+        window.toggleModeMenu = toggleModeMenu;
+
+        function setMode(mode) {
+            currentMode = mode;
+            modeMenu.classList.remove('show');
+
+            // 更新菜单勾选状态
+            document.querySelectorAll('.mode-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.mode === mode);
+            });
+            checkChat.style.visibility = mode === 'chat' ? 'visible' : 'hidden';
+            checkBuild.style.visibility = mode === 'build' ? 'visible' : 'hidden';
+
+            if (mode === 'build') {
+                userInput.style.display = 'none';
+                uploadBtnArea.classList.add('show');
+                sendBtn.textContent = '上传并构建';
+                // 清空问答模式的 pending 文件/图片
+                pendingImage = null;
+                previewImg.src = '';
+                imgWrap.classList.remove('show');
+                pendingFiles = [];
+                renderFileList();
+                // 构建模式也清空
+                buildFiles = [];
+                renderBuildFileList();
+                imagePreview.classList.remove('active');
+            } else {
+                userInput.style.display = 'block';
+                uploadBtnArea.classList.remove('show');
+                sendBtn.textContent = '发送';
+                // 清空构建模式的文件
+                buildFiles = [];
+                renderBuildFileList();
+                // 问答模式也清空
+                pendingFiles = [];
+                pendingImage = null;
+                previewImg.src = '';
+                imgWrap.classList.remove('show');
+                renderFileList();
+                imagePreview.classList.remove('active');
+            }
+        }
+        window.setMode = setMode;
+
+        // 点击页面其它区域关闭模式菜单
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.mode-switch')) {
+                modeMenu.classList.remove('show');
+            }
+        });
+
+        // 构建模式上传区域交互
+        uploadBtnArea.addEventListener('click', function(e) {
+            if (e.target === uploadBtnArea) {
+                fileInput.click();
+            }
+        });
+        uploadBtnArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadBtnArea.classList.add('dragover');
+        });
+        uploadBtnArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadBtnArea.classList.remove('dragover');
+        });
+        uploadBtnArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadBtnArea.classList.remove('dragover');
+            Array.from(e.dataTransfer.files).forEach(f => handleBuildFile(f));
+        });
+
+        function handleBuildFile(file) {
+            const allowSuffix = ['.txt', '.md', '.pdf', '.doc', '.docx'];
+            if (!allowSuffix.some(s => file.name.toLowerCase().endsWith(s))) {
+                alert('仅支持 pdf, txt, md, doc, docx 格式文档');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                buildFiles.push({
+                    name: file.name,
+                    base64: evt.target.result,
+                    type: file.type
+                });
+                renderBuildFileList();
+                imagePreview.classList.add('active');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderBuildFileList() {
+            fileListBox.innerHTML = '';
+            buildFiles.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'file-preview-item';
+                div.innerHTML = `<span>${item.name}</span><button onclick="removeBuildFile(${idx})">删除</button>`;
+                fileListBox.appendChild(div);
+            });
+        }
+        window.removeBuildFile = function(idx) {
+            buildFiles.splice(idx, 1);
+            renderBuildFileList();
+            if (!buildFiles.length) imagePreview.classList.remove('active');
+        }
+
+        // 在对话面板中插入构建进度消息
+        function appendBuildProgressMessage() {
+            const wrap = document.createElement('div');
+            wrap.className = 'message assistant';
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+
+            const logBox = document.createElement('div');
+            logBox.className = 'build-log-box';
+
+            const header = document.createElement('div');
+            header.className = 'build-log-header';
+            header.textContent = '📚 构建知识库';
+
+            const content = document.createElement('div');
+            content.className = 'build-log-content';
+            content.id = 'buildLogContent' + Date.now();
+
+            logBox.appendChild(header);
+            logBox.appendChild(content);
+            bubble.appendChild(logBox);
+            wrap.appendChild(bubble);
+            chatContainer.appendChild(wrap);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return content;
+        }
+
+        function updateBuildFileStatus(contentEl, fileName, status, msg) {
+            let row = contentEl.querySelector(`[data-file="${CSS.escape(fileName)}"]`);
+            if (!row) {
+                row = document.createElement('div');
+                row.className = 'build-file-item';
+                row.dataset.file = fileName;
+                row.innerHTML = `<span class="build-file-name">${fileName}</span><span class="build-status ${status}">${_statusText(status, msg)}</span>`;
+                contentEl.appendChild(row);
+            } else {
+                const statusEl = row.querySelector('.build-status');
+                statusEl.className = 'build-status ' + status;
+                statusEl.textContent = _statusText(status, msg);
+            }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function _statusText(status, msg) {
+            const map = { saved: '已保存', building: '构建中...', done: '已完成', error: msg || '失败' };
+            return map[status] || status;
+        }
+
+        function addBuildLogText(contentEl, text) {
+            const div = document.createElement('div');
+            div.style.marginBottom = '4px';
+            div.textContent = text;
+            contentEl.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
 
         // 输入框自适应高度
         function adjustInputHeight(el) {
@@ -484,12 +782,20 @@
             dragCounter = 0;
             dropOverlay.classList.remove('active');
             const files = e.dataTransfer.files;
-            Array.from(files).forEach(f => handleUploadFile(f));
+            if (currentMode === 'build') {
+                Array.from(files).forEach(f => handleBuildFile(f));
+            } else {
+                Array.from(files).forEach(f => handleUploadFile(f));
+            }
         });
 
         // 文件选择弹窗监听
         fileInput.addEventListener('change', () => {
-            Array.from(fileInput.files).forEach(f => handleUploadFile(f));
+            if (currentMode === 'build') {
+                Array.from(fileInput.files).forEach(f => handleBuildFile(f));
+            } else {
+                Array.from(fileInput.files).forEach(f => handleUploadFile(f));
+            }
             fileInput.value = '';
         });
 
@@ -673,6 +979,64 @@
         }
         // 发送消息 POST流式Fetch（替代EventSource，解决405/422/URL超长）
         async function sendMessage() {
+            if (currentMode === 'build') {
+                if (!buildFiles.length) {
+                    alert('请先上传文档');
+                    return;
+                }
+                const fileNames = buildFiles.map(f => f.name);
+                appendUserMessage('构建知识库', null, fileNames);
+                sendBtn.disabled = true;
+                sendBtn.textContent = '构建中...';
+
+                const buildContentEl = appendBuildProgressMessage();
+
+                try {
+                    const response = await fetch("/build-knowledge", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ files: buildFiles })
+                    });
+                    if (!response.ok) throw new Error("接口请求异常");
+
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder("utf-8");
+                    let buffer = "";
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+
+                        buffer += decoder.decode(value, { stream: true });
+                        const blocks = buffer.split("\n\n");
+                        buffer = blocks.pop();
+
+                        for (const block of blocks) {
+                            if (!block.startsWith("data: ")) continue;
+                            const jsonStr = block.replace("data: ", "").trim();
+                            if (!jsonStr) continue;
+                            const data = JSON.parse(jsonStr);
+                            if (data.type === 'log') {
+                                addBuildLogText(buildContentEl, data.content);
+                            } else if (data.type === 'progress') {
+                                updateBuildFileStatus(buildContentEl, data.file, data.status, data.msg);
+                            } else if (data.type === 'finish') {
+                                addBuildLogText(buildContentEl, data.msg);
+                            }
+                        }
+                    }
+                } catch (err) {
+                    addBuildLogText(buildContentEl, '构建异常：' + err.message);
+                } finally {
+                    buildFiles = [];
+                    renderBuildFileList();
+                    imagePreview.classList.remove('active');
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = '上传并构建';
+                }
+                return;
+            }
+
             const text = userInput.value.trim();
             if (!text && !pendingImage && pendingFiles.length === 0) return;
 

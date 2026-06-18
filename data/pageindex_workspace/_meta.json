@@ -40,5 +40,19 @@
     "doc_description": "This document provides a step-by-step recipe for making Mapo Tofu with a unique twist using salted duck eggs instead of traditional broad bean paste, creating a savory, slightly numbing, and spicy dish that's rich in protein and minerals.",
     "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\肉菜\\麻婆豆腐.md",
     "line_count": 59
+  },
+  "51ca48ae-e1a0-4c09-8048-119601a6454a": {
+    "type": "md",
+    "doc_name": "白灼菜心",
+    "doc_description": "This document provides a simple 15-minute recipe for preparing healthy Cantonese Boiled Chinese Broccoli using the quick blanching technique to preserve its natural sweetness and crispness.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\user_custom\\白灼菜心.md",
+    "line_count": 53
+  },
+  "26b84992-bc91-46b6-94e9-88a795b03ab2": {
+    "type": "md",
+    "doc_name": "拔丝土豆",
+    "doc_description": "This document provides a detailed recipe for making Crispy Fried Potatoes with Sugar Thread, including ingredient measurements, step-by-step instructions, and tips for achieving the signature sugar thread effect.",
+    "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\user_custom\\拔丝土豆.md",
+    "line_count": 49
   }
 }

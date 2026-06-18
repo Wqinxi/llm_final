@@ -10,9 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 
-from backend.models.schemas import ChatRequest
+from backend.models.schemas import ChatRequest, BuildKnowledgeRequest
 from backend.agents.main_agent import MainAgent
 from backend.tools.doc_parser import parse_document
+from backend.services.knowledge_builder import build_knowledge_stream
 
 app = FastAPI(title="AI Chat Agent")
 
@@ -99,6 +100,20 @@ async def stream_chat(req: ChatRequest) -> AsyncGenerator[str, None]:
 @app.post("/chat-stream", response_class=StreamingResponse)
 async def chat_stream(req: ChatRequest):
     generator = stream_chat(req)
+    return StreamingResponse(
+        generator,
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Content-Type-Options": "nosniff"
+        }
+    )
+
+# 构建知识库流式接口
+@app.post("/build-knowledge", response_class=StreamingResponse)
+async def build_knowledge(req: BuildKnowledgeRequest):
+    files = [{"name": f.name, "base64": f.base64, "type": f.type} for f in req.files]
+    generator = build_knowledge_stream(files)
     return StreamingResponse(
         generator,
         media_type="text/event-stream",
