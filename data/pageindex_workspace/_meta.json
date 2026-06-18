@@ -54,5 +54,110 @@
     "doc_description": "This document provides a detailed recipe for making Crispy Fried Potatoes with Sugar Thread, including ingredient measurements, step-by-step instructions, and tips for achieving the signature sugar thread effect.",
     "path": "D:\\.py\\PythonProject\\llm_final\\data\\raw_docs\\user_custom\\拔丝土豆.md",
     "line_count": 49
+  },
+  "f745ed58-d31f-4ad9-9629-bae6f11adf6f": {
+    "type": "md",
+    "doc_name": "拔丝土豆",
+    "doc_description": "This document provides a detailed recipe for making Crispy Fried Potatoes with Sugar Thread, a classic Chinese dessert dish with golden color, thin sugar threads, and a crispy-soft texture.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\user_custom\\拔丝土豆.md",
+    "line_count": 49
+  },
+  "32d2a8a1-6c5f-4792-bf64-dcfcd980e90a": {
+    "type": "md",
+    "doc_name": "白灼菜心",
+    "doc_description": "This document provides a step-by-step Cantonese recipe for preparing blanched Chinese broccoli (choy sum) using a simple quick-blanching technique that preserves the vegetable's natural sweetness and crispness.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\user_custom\\白灼菜心.md",
+    "line_count": 53
+  },
+  "ce5e0fd1-51dc-4a23-a56e-f21cf6e2de0f": {
+    "type": "md",
+    "doc_name": "玉米排骨汤",
+    "doc_description": "This document provides a detailed, step-by-step recipe for making corn and pork rib soup with exact measurements, cooking times, and calorie information, designed to be beginner-friendly with a moderate difficulty rating.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\汤\\玉米排骨汤.md",
+    "line_count": 64
+  },
+  "0628992e-a521-45ef-a36b-1386e121979c": {
+    "type": "md",
+    "doc_name": "紫菜蛋花汤",
+    "doc_description": "This recipe document teaches how to make a simple 20-minute seaweed egg drop soup with common household ingredients.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\汤\\紫菜蛋花汤.md",
+    "line_count": 41
+  },
+  "4c8e089d-f695-4f57-92a1-39ebbf2591db": {
+    "type": "md",
+    "doc_name": "农家一碗香",
+    "doc_description": "This document provides a step-by-step recipe for preparing \"Farmer's Fragrant Bowl,\" a Hunan-style stir-fry combining pork belly, eggs, and green peppers for a savory and nutritionally balanced dish.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\肉菜\\农家一碗香.md",
+    "line_count": 51
+  },
+  "125d0810-502b-4d2e-98df-6e95e60991f7": {
+    "type": "md",
+    "doc_name": "咖喱肥牛",
+    "doc_description": "This document provides a detailed recipe for making home-style curry beef with specific measurements, step-by-step instructions, and tips for a balanced meat-vegetable dish that can be prepared in approximately 40 minutes.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\肉菜\\咖喱肥牛.md",
+    "line_count": 52
+  },
+  "156f2d29-454a-4efd-b0bd-19ea688782bc": {
+    "type": "md",
+    "doc_name": "梅菜扣肉",
+    "doc_description": "This document provides a detailed recipe for the Hakka traditional dish Meicai Kou Rou, including specific ingredient measurements, step-by-step instructions, cooking time, difficulty rating, and additional tips for preparation.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\肉菜\\梅菜扣肉.md",
+    "line_count": 64
+  },
+  "86154096-56dc-4fb7-9f69-a8d30c082eb6": {
+    "type": "md",
+    "doc_name": "麻婆豆腐",
+    "doc_description": "This document provides a step-by-step recipe for making Mapo Tofu with a unique twist using salted duck eggs instead of traditional broad bean paste, creating a spicy and tender tofu dish with a savory, slightly numbing flavor.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\肉菜\\麻婆豆腐.md",
+    "line_count": 59
+  },
+  "cd32d350-0ce7-40d7-9860-5f90182292a6": {
+    "type": "md",
+    "doc_name": "牛奶燕麦",
+    "doc_description": "This document presents a 3-minute recipe for a high-protein, high-fiber milk oatmeal breakfast with a fried egg, offering both regular and quick cooking methods for the oats.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\早餐\\牛奶燕麦.md",
+    "line_count": 55
+  },
+  "205885dc-84eb-4ceb-a50e-607031e99d8e": {
+    "type": "md",
+    "doc_name": "茶叶蛋",
+    "doc_description": "This document provides a comprehensive recipe for making traditional Chinese tea eggs, including precise ingredient measurements, step-by-step cooking instructions, and expert tips for achieving optimal flavor and texture.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\早餐\\茶叶蛋.md",
+    "line_count": 56
+  },
+  "c329cadf-f6f6-4927-890f-df574ffa777c": {
+    "type": "md",
+    "doc_name": "鸡蛋三明治",
+    "doc_description": "This document provides a step-by-step recipe for making a quick and easy egg sandwich with bacon, designed specifically for kitchen beginners and completed in approximately 10 minutes.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\早餐\\鸡蛋三明治.md",
+    "line_count": 43
+  },
+  "f0b5dc2c-4b06-4947-886b-f3e3cd532d39": {
+    "type": "md",
+    "doc_name": "地三鲜",
+    "doc_description": "A comprehensive guide to preparing the classic Northeast Chinese dish \"地三鲜\" (Di San Xian), featuring detailed ingredient calculations, step-by-step cooking instructions, and practical tips for achieving the perfect balance of soft eggplant, mellow potatoes, and crisp green peppers.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\素菜\\地三鲜.md",
+    "line_count": 74
+  },
+  "b60b2b86-b1b8-4458-950f-430bb6adee3d": {
+    "type": "md",
+    "doc_name": "烤茄子",
+    "doc_description": "This document provides a step-by-step oven-based recipe for making roasted eggplant with cumin and garlic, including precise ingredient measurements for two servings and precautions to prevent bursting during cooking.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\素菜\\烤茄子.md",
+    "line_count": 58
+  },
+  "071f61f9-09aa-4b81-9dcd-69558518f98d": {
+    "type": "md",
+    "doc_name": "红烧冬瓜",
+    "doc_description": "This document provides a step-by-step recipe for making Braised Winter Melon, a popular Chinese vegetarian dish that takes approximately 25 minutes to prepare with a 3-star difficulty rating.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\素菜\\红烧冬瓜.md",
+    "line_count": 54
+  },
+  "7a6a5599-db88-496b-919c-303edcb5f989": {
+    "type": "md",
+    "doc_name": "白灼菜心",
+    "doc_description": "This document provides a step-by-step recipe for preparing the classic Cantonese dish Boiled Chinese Broccoli using the traditional '白灼' blanching technique to preserve the vegetable's natural sweetness and crispness.",
+    "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\素菜\\白灼菜心.md",
+    "line_count": 53
   }
 }

@@ -1,0 +1,47 @@
+{
+  "id": "b60b2b86-b1b8-4458-950f-430bb6adee3d",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\素菜\\烤茄子.md",
+  "doc_name": "烤茄子",
+  "doc_description": "This document provides a step-by-step oven-based recipe for making roasted eggplant with cumin and garlic, including precise ingredient measurements for two servings and precautions to prevent bursting during cooking.",
+  "line_count": 58,
+  "structure": [
+    {
+      "title": "烤茄子的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 烤茄子的做法\n\n烤茄子香气浓郁、外焦里嫩，孜然和蒜蓉的辛香完美融入软糯的茄肉，是街头烧烤风味在家轻松复刻的菜品。茄子富含维生素 P 和花青素，有助于保护心血管、抗氧化。做法需要用到烤箱，但步骤清晰，新手也能在大约半 小时完成，很适合作为家庭聚餐的快手下饭菜。\n\n预估烹饪难度：★★★\n\n预估卡路里：145 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 9,
+          "text": "## 必备原料和工具\n\n- 茄子\n- 食用油\n- 酱油（生抽）\n- 蒜蓉\n- 辣椒\n- 孜然\n- 食用盐",
+          "summary": "## 必备原料和工具\n\n- 茄子\n- 食用油\n- 酱油（生抽）\n- 蒜蓉\n- 辣椒\n- 孜然\n- 食用盐"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 19,
+          "text": "## 计算\n\n按照两个人的份量：\n\n- 茄子 1 个 （大约 200g）\n- 食用油 20-30 毫升\n- 酱油 4-6 克\n- 小米椒 1 个 （大约 20g）\n- 蒜蓉 3-4 瓣\n- 孜然 1-3 克\n- 食用盐 0.5-2 克",
+          "summary": "## 计算\n\n按照两个人的份量：\n\n- 茄子 1 个 （大约 200g）\n- 食用油 20-30 毫升\n- 酱油 4-6 克\n- 小米椒 1 个 （大约 20g）\n- 蒜蓉 3-4 瓣\n- 孜然 1-3 克\n- 食用盐 0.5-2 克"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 31,
+          "text": "## 操作\n\n1. 将酱油、孜然、食用盐、蒜蓉和切碎的小米椒置于碗中，均匀搅拌备用\n2. 茄子洗净，用纸巾擦干表面的水分\n3. 用叉子在茄子的一侧扎 4-8 下\n4. 使用 15-25ml 的食用油涂满茄子表面\n5. 将烤箱温度设置为 200℃ （打开烤箱风扇 大火），预热 2 分钟\n6. 将茄子放入烤箱中层或者上层，烤制 12-15 分钟 （茄子表面有褶皱，且能按压 0.3-0.5cm 的深度即可）\n7. 取出茄子，用刀茄子上竖着划一个口子。口子居中，上下距 1-1.5cm\n8. 用小刀或者叉子伸入口子，竖着切割茄子内部\n9. 将口子微微掰开，倒入第一步准备的酱料\n10. 再次将茄子放入烤箱，将烤箱温度设置为 200℃ ，烤制 4-7 分钟\n11. 取出，关闭烤箱电源",
+          "summary": "This document provides a step-by-step recipe for preparing and cooking stuffed eggplant. It details the process of making a sauce with soy sauce, cumin, salt, garlic, and chili peppers. The eggplant is first washed, dried, poked, oiled, and then baked in a preheated oven at 200°C. After the initial bake, the eggplant is sliced open, its interior is fluffed, and the prepared sauce is stuffed inside. Finally, the stuffed eggplant is baked again for a short period before being served."
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0004",
+          "line_num": 45,
+          "text": "## 附加内容\n\n最终成品和楼下烧烤摊的烤茄子差不多，太香了！\n\n**注意事项：**\n茄子表面有水分、未涂满食用油或未使用叉子扎孔可能导致**茄子在烤制的过程中爆裂**\n\n**可以改进的环节：**\n第一次用刀划口子的时候，可以直接将茄子竖直切成两半，然后切割出纹路后涂抹上酱料\n\n![烤茄子-预览图-1](./烤茄子.jpg)\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "This document is a recipe guide for making grilled eggplant (烤茄子). It describes the final product as being as fragrant as grilled eggplant from street food stalls. The guide includes important precautions to prevent the eggplant from bursting during grilling, such as ensuring the surface is dry, applying sufficient oil, and poking holes with a fork. It also suggests an improvement to the preparation method by first cutting the eggplant vertically in half before creating patterns and applying sauce. The document includes an image of the finished dish and invites readers to provide feedback or suggest improvements through Issue or Pull request."
+        }
+      ],
+      "prefix_summary": "This document provides a recipe for roasted eggplant, highlighting its delicious flavor profile (aromatic, crispy outside, tender inside with cumin and garlic) and health benefits (rich in vitamin P and anthocyanins). It's an easy, oven-based recipe suitable for beginners, taking about half an hour to make, perfect for family meals. The estimated difficulty is 3 stars and the calorie count is 145 kcal."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "f0b5dc2c-4b06-4947-886b-f3e3cd532d39",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\素菜\\地三鲜.md",
+  "doc_name": "地三鲜",
+  "doc_description": "A comprehensive guide to preparing the classic Northeast Chinese dish \"地三鲜\" (Di San Xian), featuring detailed ingredient calculations, step-by-step cooking instructions, and practical tips for achieving the perfect balance of soft eggplant, mellow potatoes, and crisp green peppers.",
+  "line_count": 74,
+  "structure": [
+    {
+      "title": "地三鲜的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 地三鲜的做法\n\n![地三鲜成品](./地三鲜.jpg)\n\n地三鲜是东北经典家常菜，茄子软糯、土豆绵香、尖椒清脆，酱香咸鲜十分下饭。食材搭配可提供丰富的维生素与膳食纤维，土豆还带来满足的碳水能量。这道菜需要油炸和快速翻炒，有一定技巧要求，新手需稍加练习，制作全程约需 40 分钟。\n\n预估烹饪难度：★★★\n\n预估卡路里：264 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 11,
+          "text": "## 必备原料和工具\n\n- 茄子\n- 土豆\n- 尖椒\n- 葱\n- 姜\n- 蒜\n- 豆瓣酱\n- 生抽\n- 糖\n- 淀粉",
+          "summary": "## 必备原料和工具\n\n- 茄子\n- 土豆\n- 尖椒\n- 葱\n- 姜\n- 蒜\n- 豆瓣酱\n- 生抽\n- 糖\n- 淀粉"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 24,
+          "text": "## 计算\n\n注意，这道菜仅有足够 2-4 人食用的版本。\n\n- 茄子 200g\n- 土豆 150g\n- 尖椒 3 - 4 个\n- 淀粉 8g\n\n使用上述条件，计算出计划使用的原材料比例。",
+          "summary": "## 计算\n\n注意，这道菜仅有足够 2-4 人食用的版本。\n\n- 茄子 200g\n- 土豆 150g\n- 尖椒 3 - 4 个\n- 淀粉 8g\n\n使用上述条件，计算出计划使用的原材料比例。"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 35,
+          "text": "## 操作",
+          "nodes": [
+            {
+              "title": "准备原料",
+              "node_id": "0004",
+              "line_num": 37,
+              "text": "### 准备原料\n\n1. 土豆、茄子、尖椒洗净。\n2. 土豆去皮。\n3. 茄子、土豆均切成 15g 的不规则的小块。\n4. 尖椒用手顺着纹路撕即可，撕成比土豆、茄子略大 25%的块。\n5. 尽可能除去青椒表面的水分，避免后续炸的时候炸水。考虑使用厨房纸或风干半小时。\n6. 葱切 0.5cm 小段，共取 5g。蒜剁碎成蒜蓉取 15g，分成两份，各 7.5g。姜切沫取 5g。\n7. 拿一个空碗，放入生抽 10ml、糖 10g、淀粉 8g，加入 80ml 清水，彻底搅拌均匀，作为调料碗，备用。",
+              "summary": "This section details the preparation of ingredients for a dish. It begins with cleaning potatoes, eggplants, and green peppers, followed by peeling the potatoes. The potatoes and eggplants are to be cut into 15g irregular pieces, while the green peppers are to be torn into pieces 25% larger. A crucial step is to thoroughly dry the green peppers to prevent splattering during cooking. The section also covers the preparation of aromatics: green onions are cut into small segments, and garlic and ginger are minced. Finally, it explains how to make a sauce by mixing soy sauce, sugar, starch, and water in a bowl."
+            },
+            {
+              "title": "初步煎炸",
+              "node_id": "0005",
+              "line_num": 47,
+              "text": "### 初步煎炸\n\n1. 热锅，加入 150ml 油。\n2. 加入土豆，煎炸大约 3-4 分钟，以显示金黄色、筷子能轻松扎透为准。\n3. 捞出土豆，留下油。\n4. 加入茄子，煎炸大约 2-3 分钟，待其到大约 7 分熟，以茄子变软、边缘微焦且吐出多余油脂为准。\n5. 捞出茄子，留下油。（也可能没有残余的油了）\n6. 如果锅内已经没有流动的油，可以考虑补充 15ml 油。\n7. 加入尖椒块，煎炸大约 15 秒，边缘稍微起虎皮后，立刻捞出。倒出锅里的油。",
+              "summary": "This document describes the initial frying process for a dish. It details the sequential frying of potatoes, eggplants, and chili peppers. Each ingredient has specific frying times and desired outcomes: potatoes are fried until golden and tender (3-4 minutes), eggplants until soft and slightly charred while releasing excess fat (2-3 minutes), and chili peppers for a very short time until their edges blister (15 seconds). The process also involves managing the cooking oil, which is retained after frying some ingredients and supplemented if needed before frying the next. The final step is to remove the chili peppers and discard the remaining oil."
+            },
+            {
+              "title": "最终煎炸",
+              "node_id": "0006",
+              "line_num": 57,
+              "text": "### 最终煎炸\n\n1. 重新热锅，重新加入 15ml 新底油。\n2. 放入葱 5g，姜 5g，蒜 7.5g。中小火爆香。\n3. 放入豆瓣酱 15ml。转小火，炒出红油和酱香味。\n4. 倒入调料碗。立刻转大火，高速搅拌避免糊锅！大约 10 秒后汤汁就会开始冒泡并变得黏稠。\n5. 立刻放入之前准备好的全部土豆、茄子和尖椒。\n6. 翻炒 20 秒，让浓稠的酱汁均匀挂在食材上。\n7. 关火，撒入 7.5g 蒜。翻拌均匀，盛盘。",
+              "summary": "This partial document outlines the final steps of a stir-fry recipe. It details the process of creating a thick, fragrant sauce by sautéing aromatics like scallion, ginger, and garlic with broad bean paste. The sauce is then combined with pre-cooked potatoes, eggplant, and chili peppers in a quick, high-heat stir-fry to ensure even coating. The dish is finished by adding minced garlic after the heat is turned off and then serving."
+            }
+          ],
+          "prefix_summary": "## 操作"
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0007",
+          "line_num": 67,
+          "text": "## 附加内容\n\n* 糖比淀粉多是非常合理的。淀粉在这里不负责提供味道，它只是一种物理增稠剂。\n* 茄子在煎炸以后，体积会缩小 4 倍。所以拿的时候可能会注意到茄子下锅很多，出锅很少。这是正常的。\n* 青椒下锅的瞬间可能会爆发很多水分，导致油飞溅。务必下锅时用锅盖当盾牌挡在身前，小心下锅。\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "这份文档片段提供了几个烹饪技巧和注意事项。主要内容包括：解释了糖多于淀粉的合理性，说明淀粉仅作为物理增稠剂；提醒茄子在煎炸后体积会缩小四分之三，这是正常现象；警告青椒下锅时可能因水分爆发导致油飞溅，并建议使用锅盖作为防护。最后，文档鼓励用户在遵循指南时发现问题或改进建议时，通过提交Issue或Pull request进行反馈。"
+        }
+      ],
+      "prefix_summary": "This document describes \"地三鲜\" (Di San Xian), a classic Northeast Chinese home-cooked dish featuring eggplant, potatoes, and green peppers. The dish is characterized by its soft eggplant, mellow potatoes, crisp green peppers, and savory sauce that pairs well with rice. The document highlights the nutritional benefits including vitamins, dietary fiber, and carbohydrates from potatoes. It notes the cooking technique requires deep-frying and quick stir-frying, with some skill needed for beginners. The document provides practical information including estimated cooking time (40 minutes), difficulty level (3 stars), and calorie count (264 kcal)."
+    }
+  ]
+}

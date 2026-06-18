@@ -1,0 +1,47 @@
+{
+  "id": "205885dc-84eb-4ceb-a50e-607031e99d8e",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\早餐\\茶叶蛋.md",
+  "doc_name": "茶叶蛋",
+  "doc_description": "This document provides a comprehensive recipe for making traditional Chinese tea eggs, including precise ingredient measurements, step-by-step cooking instructions, and expert tips for achieving optimal flavor and texture.",
+  "line_count": 56,
+  "structure": [
+    {
+      "title": "茶叶蛋的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 茶叶蛋的做法\n\n这道传统小吃茶香浓郁，鲜香可口，富含优质蛋白质，是快捷的营养早餐之选。制作步骤清晰，难度适中，新手需要留意火候与香料配比，约 30 分钟即可完成，一次能做够 2-3 人食用，适合周末从容备好。\n\n预估烹饪难度：★★★\n\n预估卡路里：193 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 9,
+          "text": "## 必备原料和工具\n\n- 鸡蛋\n- 八角\n- 香叶\n- 桂皮\n- 茴香\n- 冰糖\n- 红茶\n- 生抽\n- 老抽\n- 食盐",
+          "summary": "## 必备原料和工具\n\n- 鸡蛋\n- 八角\n- 香叶\n- 桂皮\n- 茴香\n- 冰糖\n- 红茶\n- 生抽\n- 老抽\n- 食盐"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 22,
+          "text": "## 计算\n\n- 鸡蛋 400g（约 8 颗）\n- 八角 4g（约 2 颗）\n- 香叶 0.5-1g（约 2 片）\n- 桂皮 3g（1 小块）\n- 茴香 5g\n- 冰糖 15g\n- 红茶 20g\n- 生抽 15g\n- 老抽 25g\n- 食盐 3g\n\n使用上述条件，计算出计划使用的原材料比例。",
+          "summary": "## 计算\n\n- 鸡蛋 400g（约 8 颗）\n- 八角 4g（约 2 颗）\n- 香叶 0.5-1g（约 2 片）\n- 桂皮 3g（1 小块）\n- 茴香 5g\n- 冰糖 15g\n- 红茶 20g\n- 生抽 15g\n- 老抽 25g\n- 食盐 3g\n\n使用上述条件，计算出计划使用的原材料比例。"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 37,
+          "text": "## 操作\n\n1. 用冷水将鸡蛋煮熟，大火大约 8 分钟（根据自家厨具决定）\n2. 鸡蛋捞出，过冷水\n3. 将鸡蛋互相碰撞，使每个鸡蛋产生裂缝\n4. 将鸡蛋下锅，放入八角，香叶，桂皮，茴香，冰糖，红茶，生抽，老抽，食盐\n5. 加水直至没过鸡蛋\n6. 大火煮开之后，转中小火煮 15 分钟\n\n> 中火煮15 分钟之后，捞出料渣，鸡蛋再浸泡一会口感更佳",
+          "summary": "This document provides a recipe for making tea eggs. It details the steps from boiling and cracking the eggs to simmering them in a flavorful broth made with spices like star anise, cinnamon, and fennel, along with soy sauce, tea, and sugar. The final step involves removing the spices and allowing the eggs to soak to enhance their flavor and texture."
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0004",
+          "line_num": 48,
+          "text": "## 附加内容\n\n- 鸡蛋捞出过冷水是为了让鸡蛋和壳之间产生间隙\n- 食盐可根据个人口味选择不加\n- 八角，香叶，桂皮，茴香，冰糖，自己没有这么多食材可以买现成的卤料包\n- 常规做法的卤汁渗透速度慢，内部味道容易偏淡。想入味更快、切面更好看：**剥壳** → 在蛋白侧面**划 3–11 刀**（上下十字方向，接近蛋黄即可，别太深以免蛋黄散出）→ 放入小容器，卤汁**没过鸡蛋** → 浸泡 **2 天以上**\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "This document provides supplementary tips and an advanced technique for making marinated eggs. It explains that cooling boiled eggs in cold water helps separate the shell from the egg for easier peeling. It notes that salt is optional and lists common spices like star anise and cinnamon, suggesting a pre-made spice packet as a convenient alternative. The main focus is a detailed method to achieve a more flavorful and visually appealing result: peeling the eggs, making shallow cuts in the egg white, submerging them in brine, and soaking for over two days. The document also invites readers to provide feedback for improvements."
+        }
+      ],
+      "prefix_summary": "# 茶叶蛋的做法\n\n这道传统小吃茶香浓郁，鲜香可口，富含优质蛋白质，是快捷的营养早餐之选。制作步骤清晰，难度适中，新手需要留意火候与香料配比，约 30 分钟即可完成，一次能做够 2-3 人食用，适合周末从容备好。\n\n预估烹饪难度：★★★\n\n预估卡路里：193 大卡"
+    }
+  ]
+}

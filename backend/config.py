@@ -6,6 +6,6 @@ MAIN_MODEL = "glm-4-flash"
 VISION_MODEL = "glm-4v"
 
 # PageIndex 配置
-PAGEINDEX_PATH = os.getenv("PAGEINDEX_PATH", "")
+PAGEINDEX_PATH = os.getenv("PAGEINDEX_PATH", r"C:\Users\Jennifer\source\codes\ai_project\PageIndex")
 PAGEINDEX_WORKSPACE = os.path.join(os.path.dirname(__file__), "..", "data", "pageindex_workspace")
 PAGEINDEX_MODEL = "zai/glm-4.5-flash"

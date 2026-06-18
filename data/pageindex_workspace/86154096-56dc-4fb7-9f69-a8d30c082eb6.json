@@ -1,0 +1,47 @@
+{
+  "id": "86154096-56dc-4fb7-9f69-a8d30c082eb6",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\肉菜\\麻婆豆腐.md",
+  "doc_name": "麻婆豆腐",
+  "doc_description": "This document provides a step-by-step recipe for making Mapo Tofu with a unique twist using salted duck eggs instead of traditional broad bean paste, creating a spicy and tender tofu dish with a savory, slightly numbing flavor.",
+  "line_count": 59,
+  "structure": [
+    {
+      "title": "麻婆豆腐的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 麻婆豆腐的做法\n\n![麻婆豆腐-预览图-1](./1.jpeg)\n\n这道香辣滑嫩的豆腐菜以咸鸭蛋替代传统豆瓣酱，咸鲜中带着微麻微辣，格外开胃下饭。富含优质蛋白和钙、铁等多种微量元素。制作难度适中，对新手友好，全程约需 40 分钟。\n\n预估烹饪难度：★★★\n\n预估卡路里：476 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 11,
+          "text": "## 必备原料和工具\n\n- 内脂豆腐（推荐清美）\n- 水果刀\n- 咸鸭蛋（推荐留夫鸭的，这个是灵魂）\n- 五花肉（超市的肉糜也行）\n- 大蒜\n- 生姜\n- 小米椒（不吃辣的可选）\n- 香辣酱（推荐广乐的）\n- 花椒\n- 食盐\n- 酱油（味极鲜酱油）",
+          "summary": "## 必备原料和工具\n\n- 内脂豆腐（推荐清美）\n- 水果刀\n- 咸鸭蛋（推荐留夫鸭的，这个是灵魂）\n- 五花肉（超市的肉糜也行）\n- 大蒜\n- 生姜\n- 小米椒（不吃辣的可选）\n- 香辣酱（推荐广乐的）\n- 花椒\n- 食盐\n- 酱油（味极鲜酱油）"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 25,
+          "text": "## 计算\n\n- 1 盒内脂豆腐\n- 1 枚咸鸭蛋\n- 20-30g 五花肉\n- 两瓣大蒜\n- 2 片生姜\n- 5 根小米辣\n- 5g 蒜蓉辣酱\n- 20 颗花椒\n- 3g 食盐\n- 10g 酱油",
+          "summary": "## 计算\n\n- 1 盒内脂豆腐\n- 1 枚咸鸭蛋\n- 20-30g 五花肉\n- 两瓣大蒜\n- 2 片生姜\n- 5 根小米辣\n- 5g 蒜蓉辣酱\n- 20 颗花椒\n- 3g 食盐\n- 10g 酱油"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 38,
+          "text": "## 操作\n\n1. 大蒜和生姜切碎，备用\n2. 小米辣切成辣椒圈，备用\n3. 五花肉切成肉糜（本来就是买的肉糜的跳过）\n4. 肉糜中加入一半的食盐和味极鲜酱油，搅拌均匀，备用\n5. 鸭蛋用菜刀竖着对半切开（注意安全），去除蛋黄（一定要去除，不然会腥），剩下的蛋白捣碎成大约 2 mm * 2 mm 大小，不用太碎，备用\n6. 打开豆腐包装，用水果刀将在盒子中的豆腐划成大约 2.5 cm * 3 cm 大小，备用\n7. 热锅，锅内放入 10ml - 15ml 食用油。等待 10 秒让油温升高\n8. 调成小火，放入大蒜、生姜、辣椒圈、花椒、咸鸭蛋、蒜蓉辣酱翻炒 20 秒，炒出香味\n9. 调成中火，放入肉糜，翻炒大约 1 分钟，肉炒变色\n10. 调成小火，放入豆腐，将剩下的食盐、味极鲜酱油酱油均匀的洒在豆腐上\n11. 从锅边倒入开水（不然豆腐容易破），没过豆腐即可\n12. 开大火，水沸腾后立马转入中火，等待大约 10 分钟\n13. 等到水只剩 1/5 并且豆腐表面已经入色，关火，盛盘",
+          "summary": "This document provides a step-by-step recipe for a stir-fried tofu dish. It details the preparation of ingredients, including chopping garlic, ginger, and chili, and preparing minced pork and salted duck egg. The cooking process involves sautéing aromatics, stir-frying the pork, adding tofu, and simmering the dish with seasonings until the liquid reduces and the tofu is fully flavored."
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0004",
+          "line_num": 54,
+          "text": "## 附加内容\n\n- 期间一定要注意观察，防止糊锅\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "## 附加内容\n\n- 期间一定要注意观察，防止糊锅\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。"
+        }
+      ],
+      "prefix_summary": "# 麻婆豆腐的做法\n\n![麻婆豆腐-预览图-1](./1.jpeg)\n\n这道香辣滑嫩的豆腐菜以咸鸭蛋替代传统豆瓣酱，咸鲜中带着微麻微辣，格外开胃下饭。富含优质蛋白和钙、铁等多种微量元素。制作难度适中，对新手友好，全程约需 40 分钟。\n\n预估烹饪难度：★★★\n\n预估卡路里：476 大卡"
+    }
+  ]
+}

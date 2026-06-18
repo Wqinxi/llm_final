@@ -1,0 +1,47 @@
+{
+  "id": "156f2d29-454a-4efd-b0bd-19ea688782bc",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\肉菜\\梅菜扣肉.md",
+  "doc_name": "梅菜扣肉",
+  "doc_description": "This document provides a detailed recipe for the Hakka traditional dish Meicai Kou Rou, including specific ingredient measurements, step-by-step instructions, cooking time, difficulty rating, and additional tips for preparation.",
+  "line_count": 64,
+  "structure": [
+    {
+      "title": "梅菜扣肉的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 梅菜扣肉的做法\n\n这是一道客家传统名菜，成菜酱红油亮、汤汁黏稠，扣肉肥而不腻、软烂醇香。五花肉富含优质蛋白和脂肪酸，搭配梅干菜能提供膳食纤维。整体工序稍多，需要掌握煮、炸、蒸的火候，对新手有一定挑战。从备料到出锅，连同浸泡梅菜的时间在内，大约需要 2.5 小时。\n\n预估烹饪难度：★★★★\n\n预估卡路里：3756 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 9,
+          "text": "## 必备原料和工具\n\n* 五花肉\n* 梅菜\n* 五香粉\n* 食用油\n* 白砂糖\n* 老抽\n* 生抽\n* 小米椒\n* 蒜末\n* 食用盐\n* 鸡精",
+          "summary": "## 必备原料和工具\n\n* 五花肉\n* 梅菜\n* 五香粉\n* 食用油\n* 白砂糖\n* 老抽\n* 生抽\n* 小米椒\n* 蒜末\n* 食用盐\n* 鸡精"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 23,
+          "text": "## 计算\n\n每份：\n\n* 五花肉 200 g\n* 梅菜 30 g\n* 五香粉 2 g\n* 食用油 300 ml\n* 白砂糖 5 g\n* 老抽  30 ml\n* 生抽  20 ml\n* 小米椒  1 个\n* 蒜末 10 g\n* 食用盐 2 g\n* 鸡精 2 g",
+          "summary": "## 计算\n\n每份：\n\n* 五花肉 200 g\n* 梅菜 30 g\n* 五香粉 2 g\n* 食用油 300 ml\n* 白砂糖 5 g\n* 老抽  30 ml\n* 生抽  20 ml\n* 小米椒  1 个\n* 蒜末 10 g\n* 食用盐 2 g\n* 鸡精 2 g"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 39,
+          "text": "## 操作\n\n1. 梅菜放到清水中，浸泡 1 小时\n2. 锅中倒入 50 ml 食用油，将整个五花肉猪皮朝下，放到锅中 1 分钟 ，取出挂掉猪皮 【可选】\n3. 锅中加入开水，放入五花肉，大火煮 20 分钟 （筷子可以插进五花肉），取出五花肉\n4. 在五花肉表面涂抹均匀老抽、五香粉、白砂糖，放置 15 分钟\n5. 起锅烧油，加入五花肉，中火油炸直至两面金黄色（3-5 分钟）\n6. 起锅烧油，倒入梅菜，加上小米椒、蒜蓉、鸡精、食用盐后翻炒，直至炒干梅干菜水分\n7. 五花肉切片（后端 0.5-1 cm）,放在大碗中，散上梅干菜\n8. 中火蒸 45 分钟\n9. 拿个盘子倒盖在五花肉大碗中，将五花肉倒在盘子中\n\n![梅菜扣肉-预览图-1](./1.jpeg)\n![梅菜扣肉-预览图-2](./2.jpeg)\n![梅菜扣肉-预览图-3](./3.jpeg)\n![梅菜扣肉-预览图-4](./4.jpeg)",
+          "summary": "This document provides a detailed, step-by-step recipe for preparing the classic Chinese dish, \"梅菜扣肉\" (Steamed Pork Belly with Preserved Mustard Greens). The instructions cover the entire process, from soaking the preserved greens to boiling, frying, and seasoning the pork belly, and finally, assembling the ingredients and steaming them together before serving. The process is illustrated with accompanying images."
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0004",
+          "line_num": 56,
+          "text": "## 附加内容\n\n* 制作过程中发现，脆皮五花肉真香 Orz~\n* 不喜欢吃甜的可以去掉白砂糖，不影响主流程\n* 倒数第二个步骤，可以根据个人喜好调整时间\n* 炒干梅干菜的作用是为了后续吸油（盲猜）\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "## 附加内容\n\n* 制作过程中发现，脆皮五花肉真香 Orz~\n* 不喜欢吃甜的可以去掉白砂糖，不影响主流程\n* 倒数第二个步骤，可以根据个人喜好调整时间\n* 炒干梅干菜的作用是为了后续吸油（盲猜）\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。"
+        }
+      ],
+      "prefix_summary": "This document provides a recipe for the Hakka traditional dish, Meicai Kou Rou. It describes the dish's characteristics: a rich, red, and shiny appearance with a thick sauce, and pork belly that is rich but not greasy, soft, and flavorful. The recipe also notes the nutritional benefits of the ingredients, such as protein and fiber. It highlights the complexity of the cooking process, which requires skill in boiling, frying, and steaming, making it challenging for beginners. Practical information includes an estimated cooking time of 2.5 hours and a high difficulty rating of four stars, along with a calorie estimate of 3756 kcal."
+    }
+  ]
+}

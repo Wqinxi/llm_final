@@ -1,0 +1,47 @@
+{
+  "id": "125d0810-502b-4d2e-98df-6e95e60991f7",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\肉菜\\咖喱肥牛.md",
+  "doc_name": "咖喱肥牛",
+  "doc_description": "This document provides a detailed recipe for making home-style curry beef with specific measurements, step-by-step instructions, and tips for a balanced meat-vegetable dish that can be prepared in approximately 40 minutes.",
+  "line_count": 52,
+  "structure": [
+    {
+      "title": "咖喱肥牛的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 咖喱肥牛的做法\n\n![咖喱肥牛成品](./咖喱肥牛.jpg)\n\n咖喱肥牛是一道浓郁下饭的家常菜，咖喱的辛香与肥牛的脂香融合，搭配土豆、胡萝卜等蔬菜，口感绵软醇厚。富含蛋白质、维生素和钙质，荤素搭配均衡。做法简单，对新手友好，一般只需 40 分钟就能端上餐桌，很适合作为便当菜。\n\n预估烹饪难度：★★★★\n\n预估卡路里：1821 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 11,
+          "text": "## 必备原料和工具\n\n- 香叶\n- 纯牛奶（推荐卫岗鲜奶）\n- 洋葱\n- 胡萝卜\n- 土豆\n- 肥牛卷\n- 咖喱块",
+          "summary": "## 必备原料和工具\n\n- 香叶\n- 纯牛奶（推荐卫岗鲜奶）\n- 洋葱\n- 胡萝卜\n- 土豆\n- 肥牛卷\n- 咖喱块"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 21,
+          "text": "## 计算\n\n每次制作前需要确定计划做几份。一份正好够 2 个人吃。\n\n每份：\n\n- 香叶 1 片\n- 纯牛奶 50ml\n- 洋葱 100g\n- 胡萝卜 150g\n- 土豆 200g （挺饱腹的，酌情添加）\n- 肥牛卷 300g （喜欢吃肉就多来点）\n- 咖喱块 2 块 （大约 100g）",
+          "summary": "## 计算\n\n每次制作前需要确定计划做几份。一份正好够 2 个人吃。\n\n每份：\n\n- 香叶 1 片\n- 纯牛奶 50ml\n- 洋葱 100g\n- 胡萝卜 150g\n- 土豆 200g （挺饱腹的，酌情添加）\n- 肥牛卷 300g （喜欢吃肉就多来点）\n- 咖喱块 2 块 （大约 100g）"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 35,
+          "text": "## 操作\n\n1. 洋葱切成条状、胡萝卜以及土豆切成块状，备用\n2. 烧一锅开水，水沸时将肥牛卷下锅，捞出血沫后放在一边沥水，备用\n3. 热锅，锅内放入 10ml - 15ml 食用油，**等待 10 秒让油温升高**\n4. 放入洋葱，翻炒至洋葱变软变透明\n5. 放入土豆以及胡萝卜**翻炒 2 分钟**\n6. 加入冷水至淹没所有食材即可\n7. 将香叶、咖喱块投入锅中，盖上锅盖，**待水沸腾后将火调小然后等待直至土豆块以及胡萝卜块炖至软烂（可用筷子确认）**\n8. 加入肥牛卷以及牛奶，盖上锅盖再小火煮 2-3 分钟即可出锅（用勺子搅拌食材，注意力度，避免肥牛卷破碎）",
+          "summary": "This document provides a step-by-step recipe for making a curry dish. The main points covered are:\n1.  **Preparation of ingredients:** Chopping onions, carrots, and potatoes.\n2.  **Pre-cooking the meat:** Blanching beef brisket slices in boiling water.\n3.  **Sautéing vegetables:** Cooking onions, then adding potatoes and carrots in a hot pan with oil.\n4.  **Simmering the curry:** Adding water, bay leaves, and curry blocks, then simmering until the vegetables are soft.\n5.  **Final cooking:** Adding the pre-cooked beef brisket and milk, and simmering briefly before serving."
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0004",
+          "line_num": 46,
+          "text": "## 附加内容\n\n- 咖喱块不用捣碎，直接整块投入即可。\n- 操作时，需要注意搅拌食材，避免食材调味料不均匀。\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "## 附加内容\n\n- 咖喱块不用捣碎，直接整块投入即可。\n- 操作时，需要注意搅拌食材，避免食材调味料不均匀。\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。"
+        }
+      ],
+      "prefix_summary": "This document provides a recipe for curry beef (咖喱肥牛), describing it as a rich, home-style dish that combines curry's spiciness with beef's richness, enhanced by vegetables like potatoes and carrots. The recipe highlights its nutritional benefits (protein, vitamins, calcium), balanced meat-vegetable combination, and beginner-friendly preparation method. It notes the dish can be prepared in approximately 40 minutes, making it suitable for bento boxes, and includes estimated difficulty (4 stars) and calorie count (1821 kcal)."
+    }
+  ]
+}

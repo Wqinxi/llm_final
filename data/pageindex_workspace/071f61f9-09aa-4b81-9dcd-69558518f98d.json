@@ -1,0 +1,47 @@
+{
+  "id": "071f61f9-09aa-4b81-9dcd-69558518f98d",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\素菜\\红烧冬瓜.md",
+  "doc_name": "红烧冬瓜",
+  "doc_description": "This document provides a step-by-step recipe for making Braised Winter Melon, a popular Chinese vegetarian dish that takes approximately 25 minutes to prepare with a 3-star difficulty rating.",
+  "line_count": 54,
+  "structure": [
+    {
+      "title": "红烧冬瓜的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 红烧冬瓜的做法\n\n红烧冬瓜是一道色泽红亮、香鲜味美的家常素菜，口感软糯入味，属于大众喜爱的中式烧菜。冬瓜本身富含水分、膳食纤维和维生素 C，具有清热解暑、利尿消肿的作用，搭配简单的调味料，营养又好消化。这道菜对初学者比较友好，操作步骤清晰，只需掌握好火候和调味，预计制作时长约 25 分钟。\n\n预估烹饪难度：★★★\n\n预估卡路里：519 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 9,
+          "text": "## 必备原料和工具\n\n* 冬瓜\n* 食用油\n* 料酒\n* 淀粉\n* 生抽\n* 老抽\n* 鸡精\n* 香葱\n* 姜末\n* 蚝油",
+          "summary": "## 必备原料和工具\n\n* 冬瓜\n* 食用油\n* 料酒\n* 淀粉\n* 生抽\n* 老抽\n* 鸡精\n* 香葱\n* 姜末\n* 蚝油"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 22,
+          "text": "## 计算\n\n每份：\n\n* 冬瓜 300 g\n* 食用油 50 ml\n* 料酒 2 ml\n* 淀粉 10 g\n* 生抽 10 ml\n* 老抽 15 ml\n* 鸡精 3 g\n* 香葱 0.5 根\n* 姜末 1 粒\n* 蚝油 15 ml",
+          "summary": "## 计算\n\n每份：\n\n* 冬瓜 300 g\n* 食用油 50 ml\n* 料酒 2 ml\n* 淀粉 10 g\n* 生抽 10 ml\n* 老抽 15 ml\n* 鸡精 3 g\n* 香葱 0.5 根\n* 姜末 1 粒\n* 蚝油 15 ml"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 37,
+          "text": "## 操作\n\n1. 冬瓜去皮，切 边长不超过 2cm 小块\n2. 起锅烧油，放入冬瓜，缓缓翻滚煎炸 2 分钟 ，直至冬瓜表面泛金黄色\n3. 取出冬瓜，放入大碗备用\n4. 利用锅中的剩余油，依次放入姜末、生抽、蚝油，翻炒 15 S\n5. 重新倒入冬瓜，翻炒 30 S 后，加入开水，水要没过冬瓜表面，大火煮 10 分钟\n6. 加入老抽上色，继续煮，直至冬瓜软糯（筷子可以轻松插近冬瓜）\n7. 加入鸡精、料酒、香葱翻炒后 30 S， 取出冬瓜到大碗中\n8. 锅中剩余汤汁保留，倒入水淀粉，煮开后汤汁浇灌在冬瓜表面\n\n![红烧冬瓜-预览图-1](./1.jpeg)\n![红烧冬瓜-预览图-2](./2.jpeg)",
+          "summary": "This document provides a step-by-step recipe for preparing Braised Winter Melon (红烧冬瓜). The instructions detail the process of peeling and cutting the winter melon, pan-frying it until golden, and then simmering it with a sauce made from ginger, soy sauce, oyster sauce, and other seasonings. The final steps involve cooking the melon until tender, thickening the remaining sauce with a starch-water mixture, and pouring it over the melon before serving. The recipe is accompanied by two images of the finished dish."
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0004",
+          "line_num": 51,
+          "text": "## 附加内容\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "## 附加内容\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。"
+        }
+      ],
+      "prefix_summary": "This document provides a recipe for Braised Winter Melon, a popular and easy-to-make Chinese vegetarian dish. It describes the dish's appealing qualities (bright color, delicious taste, soft texture) and highlights the health benefits of winter melon, such as being rich in nutrients and aiding in digestion. The text notes that the recipe is beginner-friendly, takes about 25 minutes to prepare, and provides an estimated difficulty of 3 stars and 519 calories."
+    }
+  ]
+}

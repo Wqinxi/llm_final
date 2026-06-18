@@ -1,0 +1,47 @@
+{
+  "id": "f745ed58-d31f-4ad9-9629-bae6f11adf6f",
+  "type": "md",
+  "path": "C:\\Users\\Jennifer\\source\\codes\\ai_project\\llm_final\\data\\raw_docs\\user_custom\\拔丝土豆.md",
+  "doc_name": "拔丝土豆",
+  "doc_description": "This document provides a detailed recipe for making Crispy Fried Potatoes with Sugar Thread, a classic Chinese dessert dish with golden color, thin sugar threads, and a crispy-soft texture.",
+  "line_count": 49,
+  "structure": [
+    {
+      "title": "拔丝土豆的做法",
+      "node_id": "0000",
+      "line_num": 1,
+      "text": "# 拔丝土豆的做法\n\n拔丝土豆是一道经典的鲁菜，成菜色泽金黄、糖丝细长，外脆里糯、香甜可口。土豆富含碳水化合物和维生素 C，能快速补充能量。这道菜有一定难度，新手需注意熬糖火候，避免翻沙或焦苦。从备料到出锅，预计制作时长约 30 分钟。\n\n预估烹饪难度：★★★\n\n预估卡路里：1158 大卡",
+      "nodes": [
+        {
+          "title": "必备原料和工具",
+          "node_id": "0001",
+          "line_num": 9,
+          "text": "## 必备原料和工具\n\n* 土豆\n* 食用油\n* 淀粉\n* 白砂糖\n* 水\n* 芝麻",
+          "summary": "## 必备原料和工具\n\n* 土豆\n* 食用油\n* 淀粉\n* 白砂糖\n* 水\n* 芝麻"
+        },
+        {
+          "title": "计算",
+          "node_id": "0002",
+          "line_num": 18,
+          "text": "## 计算\n\n每份：\n\n* 土豆 2 个\n* 食用油 300 ml （土豆能浮在油上面即可）\n* 淀粉 30 g\n* 白砂糖 120 g （要多放糖，这是为了在土豆上面裹上一层厚厚的糖浆，从而产生拔丝的效果）\n* 水 100 ml\n* 芝麻 5 g",
+          "summary": "## 计算\n\n每份：\n\n* 土豆 2 个\n* 食用油 300 ml （土豆能浮在油上面即可）\n* 淀粉 30 g\n* 白砂糖 120 g （要多放糖，这是为了在土豆上面裹上一层厚厚的糖浆，从而产生拔丝的效果）\n* 水 100 ml\n* 芝麻 5 g"
+        },
+        {
+          "title": "操作",
+          "node_id": "0003",
+          "line_num": 29,
+          "text": "## 操作\n\n1. 土豆去皮，切均匀的小块。放入淀粉（不加水）搅拌，使得淀粉覆盖土豆表面\n2. 起锅烧油，放入土豆块，缓缓翻滚煎炸 5-7 分钟 ，直至筷子可以插进土豆\n3. 取出土豆，放入大碗备用\n4. 锅中加入水、白砂糖，沿着一个方向慢慢搅动白砂糖，直到白砂糖颜色变成褐色\n5. 重新倒入土豆，翻炒 30 S 后 出锅\n6. 土豆盛盘，散上芝麻\n\n![拔丝土豆-预览图-1](./1.jpeg)\n![拔丝土豆-预览图-2](./2.jpeg)\n![拔丝土豆-预览图-3](./3.jpeg)\n![拔丝土豆-预览图-4](./4.jpeg)",
+          "summary": "This document provides a step-by-step recipe for making Crispy Fried Potatoes with Sugar Thread (拔丝土豆). It includes detailed instructions for preparing potatoes by coating them with starch, frying them until tender, creating a caramel sauce by heating sugar until it turns brown, and combining the potatoes with the sauce to create the signature dish. The recipe concludes with plating the dish and sprinkling sesame seeds on top. The document also references four images showing the preparation process and final result of this Chinese dessert dish."
+        },
+        {
+          "title": "附加内容",
+          "node_id": "0004",
+          "line_num": 43,
+          "text": "## 附加内容\n\n* 土豆煎炸不可太熟透，否则在拔丝端盘时不容易定型，影响美观\n* 对于使用剩余的食用油，可以考虑重新收集到油壶。\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。",
+          "summary": "## 附加内容\n\n* 土豆煎炸不可太熟透，否则在拔丝端盘时不容易定型，影响美观\n* 对于使用剩余的食用油，可以考虑重新收集到油壶。\n\n如果您遵循本指南的制作流程而发现有问题或可以改进的流程，请提出 Issue 或 Pull request 。"
+        }
+      ],
+      "prefix_summary": "# 拔丝土豆的做法\n\n拔丝土豆是一道经典的鲁菜，成菜色泽金黄、糖丝细长，外脆里糯、香甜可口。土豆富含碳水化合物和维生素 C，能快速补充能量。这道菜有一定难度，新手需注意熬糖火候，避免翻沙或焦苦。从备料到出锅，预计制作时长约 30 分钟。\n\n预估烹饪难度：★★★\n\n预估卡路里：1158 大卡"
+    }
+  ]
+}
