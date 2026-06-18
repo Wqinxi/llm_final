@@ -112,9 +112,24 @@ async def chat_stream(req: ChatRequest):
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
+# 背景食物图片静态资源
+data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+flow_images_dir = os.path.join(data_dir, "flow_images")
+app.mount("/data/flow_images", StaticFiles(directory=flow_images_dir), name="flow_images")
+
 @app.get("/")
 async def root():
     return FileResponse(os.path.join(frontend_dir, "index.html"))
+
+@app.get("/flow-images")
+async def list_flow_images():
+    if not os.path.exists(flow_images_dir):
+        return {"images": []}
+    files = [
+        f for f in os.listdir(flow_images_dir)
+        if f.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"))
+    ]
+    return {"images": sorted(files)}
 
 if __name__ == "__main__":
     import uvicorn

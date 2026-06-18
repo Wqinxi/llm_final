@@ -7,26 +7,29 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
+            position: relative;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(90deg, #e6f1ff 0%, #f6efe0 30%, #f6efe0 70%, #e6f1ff 100%);
+            background: linear-gradient(90deg, #fff1e6 0%, #f6efe0 30%, #f6efe0 70%, #fff1e6 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
         .page-shell {
+            position: relative;
+            z-index: 1;
             width: min(100%, 1080px);
             max-width: 1080px;
             background: rgba(255, 255, 255, 0.94);
-            border: 1px solid rgba(77, 120, 184, 0.16);
+            border: 1px solid rgba(184, 120, 77, 0.16);
             border-radius: 28px;
-            box-shadow: 0 24px 58px rgba(22, 52, 100, 0.12);
+            box-shadow: 0 24px 58px rgba(100, 52, 22, 0.12);
             overflow: hidden;
             backdrop-filter: blur(10px);
         }
         .page-header {
-            background: linear-gradient(135deg, #3c7dd9, #7bb3f5);
+            background: linear-gradient(135deg, #e67e22, #f39c12);
             color: #fff;
             padding: 18px 24px;
             text-align: center;
@@ -35,7 +38,7 @@
             letter-spacing: 0.02em;
         }
         .page-subtitle {
-            color: rgba(238, 243, 254, 0.95);
+            color: rgba(255, 245, 230, 0.95);
             margin-top: 6px;
             font-size: 13px;
             opacity: 0.88;
@@ -47,8 +50,8 @@
             padding: 18px 22px 22px;
         }
         .chat-panel {
-            background: linear-gradient(180deg, #fefcf6 0%, #eff8ff 100%);
-            border: 1px solid rgba(118, 149, 210, 0.18);
+            background: linear-gradient(180deg, #fefcf6 0%, #fff5eb 100%);
+            border: 1px solid rgba(210, 149, 118, 0.18);
             border-radius: 28px;
             padding: 16px;
             min-height: 360px;
@@ -73,10 +76,10 @@
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
-            box-shadow: 0 10px 24px rgba(70, 108, 159, 0.08);
+            box-shadow: 0 10px 24px rgba(159, 108, 70, 0.08);
         }
         .message.user .bubble {
-            background: #3d8be1;
+            background: #e67e22;
             color: #fff;
             border-bottom-right-radius: 6px;
         }
@@ -99,7 +102,7 @@
             gap: 14px;
             align-items: end;
             background: #ffffff;
-            border: 1px solid rgba(77, 120, 184, 0.16);
+            border: 1px solid rgba(184, 120, 77, 0.16);
             border-radius: 24px;
             padding: 18px;
             box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
@@ -115,8 +118,8 @@
             flex-wrap: wrap;
             gap: 10px;
             padding: 10px 14px;
-            background: rgba(61, 139, 225, 0.08);
-            border: 1px solid rgba(61, 139, 225, 0.2);
+            background: rgba(230, 126, 34, 0.08);
+            border: 1px solid rgba(230, 126, 34, 0.2);
             border-radius: 16px;
         }
         .image-preview-bar.active { display: flex; }
@@ -130,7 +133,7 @@
             height: 60px;
             width: 60px;
             border-radius: 14px;
-            border: 1px solid #dfe7f5;
+            border: 1px solid #f5e0d0;
             object-fit: cover;
         }
         .image-preview-bar button {
@@ -150,7 +153,7 @@
             background: #fff;
             padding: 6px 10px;
             border-radius: 10px;
-            border: 1px solid #dfe7f5;
+            border: 1px solid #f5e0d0;
         }
         .file-preview-item span {
             max-width: 120px;
@@ -172,7 +175,7 @@
         }
         textarea {
             width: 100%;
-            border: 1px solid rgba(77, 120, 184, 0.18);
+            border: 1px solid rgba(184, 120, 77, 0.18);
             border-radius: 18px;
             padding: 14px 16px;
             font-size: 15px;
@@ -189,12 +192,12 @@
             -ms-overflow-style: none;
         }
         textarea::-webkit-scrollbar{display:none}
-        textarea:focus { border-color: #3d8be1; background: #fff; }
+        textarea:focus { border-color: #e67e22; background: #fff; }
         button#sendBtn {
             height: 50px;
             min-width: 118px;
             padding: 0 24px;
-            background: linear-gradient(135deg, #3c7dd9, #68a5ff);
+            background: linear-gradient(135deg, #e67e22, #f39c12);
             color: #fff;
             border: none;
             border-radius: 18px;
@@ -204,9 +207,9 @@
             transition: transform 0.2s ease, filter 0.2s ease;
         }
         button#sendBtn:hover { transform: translateY(-1px); filter: brightness(1.05); }
-        button#sendBtn:disabled { background: #a7c7f7; cursor: not-allowed; transform: none; }
+        button#sendBtn:disabled { background: #f5c99a; cursor: not-allowed; transform: none; }
         .loading {
-            color: #60779e;
+            color: #9e7b60;
             font-style: italic;
         }
         .drop-overlay {
@@ -226,25 +229,25 @@
         /* ========== 气泡内流程日志面板样式 ========== */
         .agent-log-box {
             margin-bottom: 12px;
-            border: 1px solid #c5d4eb;
+            border: 1px solid #ebd4c5;
             border-radius: 12px;
             overflow: hidden;
-            background: #f7faff;
+            background: #fffaf7;
         }
         .agent-log-header {
             padding: 8px 12px;
-            background: #e8f0fe;
+            background: #fee8d8;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .agent-log-header span {
             font-size: 13px;
-            color: #2c426b;
+            color: #6b422c;
         }
         .agent-log-toggle {
             border: none;
-            background: #3d8be1;
+            background: #e67e22;
             color: white;
             border-radius: 6px;
             padding: 2px 8px;
@@ -276,9 +279,63 @@
             .input-area { grid-template-columns: 1fr; }
             button#sendBtn { width: 100%; }
         }
+
+        /* ========== 背景食物图片流 ========== */
+        .food-flow-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.32;
+        }
+        .food-flow-row {
+            position: absolute;
+            left: 0;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            width: max-content;
+            will-change: transform;
+        }
+        .food-flow-row.row1 { top: 25%; transform: translateY(-50%); animation: flowLeft 30s linear infinite; }
+        .food-flow-row.row2 { top: 50%; transform: translateY(-50%); animation: flowLeft 36s linear infinite; animation-delay: -12s; }
+        .food-flow-row.row3 { top: 75%; transform: translateY(-50%); animation: flowLeft 42s linear infinite; }
+        .food-flow-row img {
+            width: 132px;
+            height: 132px;
+            border-radius: 24px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+        }
+        @keyframes flowLeft {
+            0% { transform: translateY(-50%) translateX(0); }
+            100% { transform: translateY(-50%) translateX(-50%); }
+        }
+
+        /* ========== 点击食物emoji特效 ========== */
+        .click-emoji {
+            position: fixed;
+            pointer-events: none;
+            font-size: 26px;
+            z-index: 9999;
+            animation: emojiPop 0.9s ease-out forwards;
+        }
+        @keyframes emojiPop {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.4); }
+            25% { transform: translate(-50%, -50%) scale(1.3); }
+            100% { opacity: 0; transform: translate(-50%, -180%) scale(1); }
+        }
     </style>
 </head>
 <body>
+    <div class="food-flow-bg">
+        <div class="food-flow-row row1"></div>
+        <div class="food-flow-row row2"></div>
+        <div class="food-flow-row row3"></div>
+    </div>
     <div class="page-shell">
         <div class="page-header">
             AI 美食助手😋
@@ -306,6 +363,67 @@
     <div class="drop-overlay" id="dropOverlay">释放以上传图片/文档</div>
 
     <script>
+        async function initFoodFlow() {
+            let allImages = [];
+            try {
+                const res = await fetch('/flow-images');
+                if (res.ok) {
+                    const data = await res.json();
+                    allImages = data.images || [];
+                }
+            } catch (e) {
+                console.error('加载食物图片列表失败', e);
+            }
+            if (!allImages.length) return;
+
+            const rows = document.querySelectorAll('.food-flow-row');
+            const rowImages = [[], [], []];
+            allImages.forEach((src, i) => {
+                rowImages[i % 3].push(src);
+            });
+
+            rows.forEach((row, idx) => {
+                row.innerHTML = '';
+                const imgs = rowImages[idx] || [];
+                if (!imgs.length) return;
+                imgs.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = `/data/flow_images/${encodeURIComponent(src)}`;
+                    img.alt = '';
+                    row.appendChild(img);
+                });
+                const unitWidth = row.scrollWidth;
+                let copies = Math.ceil((window.innerWidth * 2.5) / unitWidth);
+                if (copies < 2) copies = 2;
+                if (copies % 2 !== 0) copies += 1;
+                for (let i = 1; i < copies; i++) {
+                    imgs.forEach(src => {
+                        const img = document.createElement('img');
+                        img.src = `/data/flow_images/${encodeURIComponent(src)}`;
+                        img.alt = '';
+                        row.appendChild(img);
+                    });
+                }
+            });
+        }
+        window.addEventListener('load', initFoodFlow);
+        window.addEventListener('resize', () => {
+            clearTimeout(window._flowResizeTimer);
+            window._flowResizeTimer = setTimeout(initFoodFlow, 200);
+        });
+
+        const foodEmojis = ['🍕','🍔','🍟','🌭','🍿','🥓','🥚','🥞','🥐','🥨','🥯','🥖','🧀','🥗','🥙','🥪','🌮','🌯','🥫','🍖','🍗','🥩','🍠','🥟','🥠','🥡','🍱','🍘','🍙','🍚','🍛','🍜','🍝','🍢','🍣','🍤','🍥','🍡','🍦','🍧','🍨','🍩','🍪','🎂','🍰','🧁','🥧','🍫','🍬','🍭','🍮','🍯','🍎','🍏','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍈','🍒','🍑','🍍','🥝','🥑','🥦','🥬','🥒','🌶️','🌽','🥕','🥔','🍆','🥜','🌰','🍄','🥥','🍞','🥣','🍴','🥢','🍽️','🥄','🍺','🍻','🥂','🍷','🥃','🍸','🍹','🍾','🍶','🍵','☕','🥛','🍼','🥤','🧃','🧉'];
+        document.addEventListener('click', function(e) {
+            const emoji = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+            const el = document.createElement('div');
+            el.className = 'click-emoji';
+            el.textContent = emoji;
+            el.style.left = e.clientX + 'px';
+            el.style.top = e.clientY + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 900);
+        });
+
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
