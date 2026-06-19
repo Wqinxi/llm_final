@@ -5,21 +5,21 @@
 ## 架构概览
 
 ```
-用户 -> 前端 -> /chat -> Main Agent
-                          |
-          ----------------- -----------------
-          |                                 |
-      Doc Agent                       Image Agent
-          |                                 |
-    普通 RAG Tool                    read_image Tool
-    PageIndex RAG Tool
+用户 -> 前端 -> /chat-stream -> Main Agent
+                                  |
+                  ----------------- -----------------
+                  |                                 |
+              Doc Agent                       Image Agent
+                  |                                 |
+               RAG Tool                      read_image Tool
+            PageIndex Tool
 ```
 
 - **Main Agent**：意图识别与结果汇总，调用智谱大模型（`glm-4-flash`）。
-- **Doc Agent**：提供文档增强能力，内置两个 Tool：
-  - `rag_search`：普通 RAG 检索，基于 ChromaDB 向量数据库实现，支持 `.txt`、`.doc`、`.docx`、`.pdf` 格式。
-  - `page_index_search`：结构化文档 PageIndex 检索，基于文档层级结构索引，支持 `.md`、`.markdown` 格式，检索结果会标注来源文档。
-- **Image Agent**：提供图像识别能力，内置 `read_image` Tool，调用智谱视觉模型（`glm-4v`）。
+- **Doc Agent**：提供文档增强能力，内置两个检索工具并合并返回结果：
+  - `rag_search`：普通 RAG 检索，基于 ChromaDB 向量数据库实现，适用于 `.txt`、`.doc`、`.docx`、`.pdf` 文档。
+  - `page_index_search`：结构化 PageIndex 检索，基于文档层级结构索引，适用于 `.md`、`.markdown` 文档，检索结果会标注来源文档。
+- **Image Agent**：提供图像识别能力，内置 `read_image` Tool，调用智谱视觉模型（`glm-4.6v-flash`）。
 - **Knowledge Builder**：支持通过前端上传文档并实时构建索引，自动根据文件类型选择向量索引或 PageIndex。
 
 ## 目录结构
@@ -80,9 +80,11 @@ pip install -r requirements.txt
 - `python-multipart`
 - `pydantic`
 - `chromadb`（向量数据库）
-- `PyPDF2`（PDF 读取）
 - `python-docx`（Word 读取）
+- `pdfplumber`（PDF 读取增强）
+- `PyPDF2`（PDF 读取回退方案）
 - `pywin32`（Windows 下读取 `.doc`）
+- `litellm` / `pageindex`（PageIndex 检索支持）
 
 ## 配置 API Key
 
@@ -172,7 +174,7 @@ py scripts/build_index.py
 py scripts/build_pageindex.py
 ```
 
-脚本会递归读取 `data/raw_docs/` 下的所有 Markdown 文件，调用智谱大模型分析文档结构，生成层级索引，保存到 `data/pageindex_workspace/`。
+脚本会递归读取 `data/raw_docs/` 下的所有 Markdown 文件（仅 `.md` / `.markdown`），调用智谱大模型分析文档结构，生成层级索引，保存到 `data/pageindex_workspace/`。
 
 - 支持子目录，不限层级。
 - 已索引的文件会跳过，避免重复处理。
@@ -184,6 +186,7 @@ py scripts/build_pageindex.py
 
 | 接口 | 方法 | 说明 |
 |------|------|------|
+| `/chat` | POST | 普通对话接口，返回 JSON 格式回答 `{"content": ...}` |
 | `/chat-stream` | POST | 流式对话接口，返回 SSE 格式的思考日志与回答内容 |
 | `/build-knowledge` | POST | 构建知识库接口，接收多文件 Base64，返回 SSE 格式的构建进度 |
 

@@ -1,9 +1,9 @@
 import os
 
-ZHIPU_API_KEY = os.getenv("ZHIPU_API_KEY", "d753350d7c9c4023936e961c22d344cc.UF8QZwxg1V1899JT")
+ZHIPU_API_KEY = os.getenv("ZHIPU_API_KEY", "")
 ZHIPU_BASE_URL = "https://open.bigmodel.cn/api/paas/v4/"
 MAIN_MODEL = "glm-4-flash"
-VISION_MODEL = "glm-4v"
+VISION_MODEL = "glm-4.6v-flash"
 
 # PageIndex 配置
 PAGEINDEX_PATH = os.getenv("PAGEINDEX_PATH", r"C:\Users\Jennifer\source\codes\ai_project\PageIndex")

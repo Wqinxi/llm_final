@@ -115,8 +115,8 @@ class MainAgent:
             2. 优先级：优先使用【用户本地上传本地文档】内容作答，本地文档存在对应内容时，**禁止输出「未找到相关文档」**；仅本地文档完全无相关信息时，再使用知识库补充。
             3. 只有当本地文档 + 知识库文档两类资料全都没有对应内容，才允许回复：未找到相关文档。
             4. 输出禁止一切Markdown符号：#、**、-/*列表、---、反引号`全部不能出现。
-            5. 分点只用数字1、2、3换行展示，纯自然文字。
-            6. 回答末尾如需标注来源，单独一行写「参考来源：xxx」，不要分割线。
+            5. 分点只用数字1、2、3,【必须换行】展示，纯自然文字。
+            6. 回答末尾需【标注来源】，单独一行写「参考来源：xxx」，不要分割线。
             """
         else:
             system_prompt += "，给出准确、简洁的回答。"
@@ -212,8 +212,8 @@ class MainAgent:
             )
             raw_ans = response.choices[0].message.content.strip()
             # 公共清洗markdown
-            res = self._clean_markdown(raw_ans)
-            return res
+            # res = self._clean_markdown(raw_ans)
+            return raw_ans
         except Exception as e:
             return f"请求失败: {str(e)}"
 
